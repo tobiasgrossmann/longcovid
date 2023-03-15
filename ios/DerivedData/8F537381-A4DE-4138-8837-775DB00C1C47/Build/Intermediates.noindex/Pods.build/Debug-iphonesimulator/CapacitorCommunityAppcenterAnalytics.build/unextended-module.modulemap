@@ -1,0 +1,10 @@
+framework module CapacitorCommunityAppcenterAnalytics {
+  umbrella header "CapacitorCommunityAppcenterAnalytics-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module CapacitorCommunityAppcenterAnalytics.__Swift {
+  exclude header "CapacitorCommunityAppcenterAnalytics-Swift.h"
+}

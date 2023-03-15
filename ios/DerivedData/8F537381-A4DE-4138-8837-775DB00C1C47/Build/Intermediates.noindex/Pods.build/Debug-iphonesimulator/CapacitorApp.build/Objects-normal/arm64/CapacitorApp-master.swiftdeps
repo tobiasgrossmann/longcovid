@@ -1,0 +1,6 @@
+version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
+options: "c25aa3e6b5498c33f130cec6596268335af0c4cb1fe2a3cafea885981d901f4f"
+build_start_time: [1678797817, 457077980]
+build_end_time: [1678797819, 659574985]
+inputs:
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/node_modules/@capacitor/app/ios/Plugin/AppPlugin.swift": [1678795693, 346534252]

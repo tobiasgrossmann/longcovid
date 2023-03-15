@@ -1,0 +1,9 @@
+version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
+options: "e1912ff25a78f3c76e0689a704b275c116754e1132d3518dfd963141c80e06a2"
+build_start_time: [1678797818, 545722007]
+build_end_time: [1678797819, 580142021]
+inputs:
+  ? "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/node_modules/@capacitor-community/appcenter-analytics/ios/Plugin/AppCenterAnalyticsBase.swift"
+  : [1678795693, 409481048]
+  ? "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/node_modules/@capacitor-community/appcenter-analytics/ios/Plugin/AppCenterAnalyticsPlugin.swift"
+  : [1678795693, 417290687]

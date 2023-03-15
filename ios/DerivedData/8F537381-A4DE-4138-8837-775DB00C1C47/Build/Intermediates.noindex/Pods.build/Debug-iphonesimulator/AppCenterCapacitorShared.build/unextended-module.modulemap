@@ -1,0 +1,10 @@
+framework module AppCenterCapacitorShared {
+  umbrella header "AppCenterCapacitorShared-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module AppCenterCapacitorShared.__Swift {
+  exclude header "AppCenterCapacitorShared-Swift.h"
+}

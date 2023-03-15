@@ -1,0 +1,24 @@
+version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
+options: "bac38620d196414cf636a5314894a1de59438ebe48e8ed7571d1edb08df50ee2"
+build_start_time: [1678797807, 301816940]
+build_end_time: [1678797811, 71247100]
+inputs:
+  ? "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Archive+BackingConfiguration.swift"
+  : [1678797760, 248687744]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Archive+Helpers.swift": [1678797760, 248454093]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Archive+MemoryFile.swift": [1678797760, 248582839]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Archive+Progress.swift": [1678797760, 250748157]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Archive+Reading.swift": [1678797760, 248901844]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Archive+ReadingDeprecated.swift": [1678797760, 249958038]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Archive+Writing.swift": [1678797760, 249628305]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Archive+WritingDeprecated.swift": [1678797760, 249311208]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Archive+ZIP64.swift": [1678797760, 249001264]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Archive.swift": [1678797760, 248799800]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Data+Compression.swift": [1678797760, 249214172]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Data+CompressionDeprecated.swift": [1678797760, 249729156]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Data+Serialization.swift": [1678797760, 250078916]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Entry+Serialization.swift": [1678797760, 249431848]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Entry+ZIP64.swift": [1678797760, 249852657]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/Entry.swift": [1678797760, 249114513]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/FileManager+ZIP.swift": [1678797760, 250376701]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/ZIPFoundation/Sources/ZIPFoundation/URL+ZIP.swift": [1678797760, 249532461]

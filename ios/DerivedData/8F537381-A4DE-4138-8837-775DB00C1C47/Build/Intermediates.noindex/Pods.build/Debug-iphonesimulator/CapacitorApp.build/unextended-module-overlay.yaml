@@ -1,0 +1,14 @@
+{
+  'version': 0,
+  'use-external-names': 'false',
+  'case-sensitive': 'false',
+  'roots': [{
+    'type': 'directory',
+    'name': "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/DerivedData/8F537381-A4DE-4138-8837-775DB00C1C47/Build/Products/Debug-iphonesimulator/CapacitorApp/CapacitorApp.framework/Modules"
+    'contents': [{
+      'type': 'file',
+      'name': "module.modulemap",
+      'external-contents': "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/DerivedData/8F537381-A4DE-4138-8837-775DB00C1C47/Build/Intermediates.noindex/Pods.build/Debug-iphonesimulator/CapacitorApp.build/unextended-module.modulemap",
+    }]
+  }]
+}

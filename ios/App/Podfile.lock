@@ -1,0 +1,85 @@
+PODS:
+  - Capacitor (4.7.0):
+    - CapacitorCordova
+  - CapacitorApp (4.1.1):
+    - Capacitor
+  - CapacitorCommunitySqlite (4.6.3-4):
+    - Capacitor
+    - SQLCipher
+    - ZIPFoundation
+  - CapacitorCordova (4.7.0)
+  - CapacitorDialog (4.0.1):
+    - Capacitor
+  - CapacitorFilesystem (4.1.4):
+    - Capacitor
+  - CapacitorLocalNotifications (4.1.5):
+    - Capacitor
+  - CapacitorShare (4.0.1):
+    - Capacitor
+  - CapawesomeCapacitorBackgroundTask (2.0.0):
+    - Capacitor
+  - CordovaPlugins (4.0.1):
+    - CapacitorCordova
+  - SQLCipher (4.5.3):
+    - SQLCipher/standard (= 4.5.3)
+  - SQLCipher/common (4.5.3)
+  - SQLCipher/standard (4.5.3):
+    - SQLCipher/common
+  - ZIPFoundation (0.9.16)
+
+DEPENDENCIES:
+  - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
+  - "CapacitorCommunitySqlite (from `../../node_modules/@capacitor-community/sqlite`)"
+  - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
+  - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
+  - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
+  - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
+  - "CapawesomeCapacitorBackgroundTask (from `../../node_modules/@capawesome/capacitor-background-task`)"
+  - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
+
+SPEC REPOS:
+  trunk:
+    - SQLCipher
+    - ZIPFoundation
+
+EXTERNAL SOURCES:
+  Capacitor:
+    :path: "../../node_modules/@capacitor/ios"
+  CapacitorApp:
+    :path: "../../node_modules/@capacitor/app"
+  CapacitorCommunitySqlite:
+    :path: "../../node_modules/@capacitor-community/sqlite"
+  CapacitorCordova:
+    :path: "../../node_modules/@capacitor/ios"
+  CapacitorDialog:
+    :path: "../../node_modules/@capacitor/dialog"
+  CapacitorFilesystem:
+    :path: "../../node_modules/@capacitor/filesystem"
+  CapacitorLocalNotifications:
+    :path: "../../node_modules/@capacitor/local-notifications"
+  CapacitorShare:
+    :path: "../../node_modules/@capacitor/share"
+  CapawesomeCapacitorBackgroundTask:
+    :path: "../../node_modules/@capawesome/capacitor-background-task"
+  CordovaPlugins:
+    :path: "../capacitor-cordova-ios-plugins"
+
+SPEC CHECKSUMS:
+  Capacitor: 146dc340ebdf751fa1b999919e4423494c243d29
+  CapacitorApp: acd42fe8561fe751ad5b5f459aa85e6acd7bee24
+  CapacitorCommunitySqlite: 4b82784a3437c19d3cda5ff07a46774a1cb36af8
+  CapacitorCordova: b9c6fdd02470c85e39baf9ae638260477a7f46f3
+  CapacitorDialog: e979738675fcd964bfab54c705ff77abb985f5c9
+  CapacitorFilesystem: 3d665e5b3719d9f6e240480a7468861b0bb35f93
+  CapacitorLocalNotifications: 50bc296e9304af2b524053bbec9892e80c28415c
+  CapacitorShare: d5da7b440281d2eaef9c4af7e913548fb060a7bc
+  CapawesomeCapacitorBackgroundTask: 976a5232fcef545e7253ce25b71037f283475edf
+  CordovaPlugins: d78c15521f9b8d9c9712eac79487a84ed35c53fd
+  SQLCipher: 57fa9f863fa4a3ed9dd3c90ace52315db8c0fdca
+  ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
+
+PODFILE CHECKSUM: 7096b1cf0f851ed986f88013deece464b080d6e9
+
+COCOAPODS: 1.11.3
