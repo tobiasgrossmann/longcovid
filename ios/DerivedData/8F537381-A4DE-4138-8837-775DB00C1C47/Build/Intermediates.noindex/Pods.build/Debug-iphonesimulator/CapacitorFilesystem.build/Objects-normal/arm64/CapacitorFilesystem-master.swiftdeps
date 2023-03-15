@@ -1,0 +1,7 @@
+version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
+options: "4aac31b9dd5b8f3347c3dde93c3f89037c38f5592af30219ee138050f98b147b"
+build_start_time: [1678797816, 337265968]
+build_end_time: [1678797819, 603570938]
+inputs:
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/node_modules/@capacitor/filesystem/ios/Plugin/Filesystem.swift": [1678795693, 695942878]
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/node_modules/@capacitor/filesystem/ios/Plugin/FilesystemPlugin.swift": [1678795693, 704753875]

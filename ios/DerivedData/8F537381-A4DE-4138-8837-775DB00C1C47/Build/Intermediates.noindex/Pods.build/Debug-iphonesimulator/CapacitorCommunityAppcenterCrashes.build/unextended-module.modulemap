@@ -1,0 +1,10 @@
+framework module CapacitorCommunityAppcenterCrashes {
+  umbrella header "CapacitorCommunityAppcenterCrashes-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module CapacitorCommunityAppcenterCrashes.__Swift {
+  exclude header "CapacitorCommunityAppcenterCrashes-Swift.h"
+}

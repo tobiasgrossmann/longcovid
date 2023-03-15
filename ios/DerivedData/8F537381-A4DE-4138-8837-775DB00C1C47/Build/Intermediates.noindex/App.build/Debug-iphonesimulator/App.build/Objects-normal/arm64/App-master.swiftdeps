@@ -1,0 +1,6 @@
+version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
+options: "293ba7cb6518c7c0e31b094c2e321df30af570e96c1db2cf28a6264120a78aa4"
+build_start_time: [1678797819, 997427940]
+build_end_time: [1678797834, 637604951]
+inputs:
+  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/App/AppDelegate.swift": [1677097019, 0]

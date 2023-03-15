@@ -1,0 +1,77 @@
+Target dependency graph (20 targets)
+AppCenter in Pods, no dependencies
+AppCenterCapacitorShared in Pods, depends on:
+AppCenter in Pods (explicit)
+CapacitorCordova in Pods, no dependencies
+Capacitor in Pods, depends on:
+CapacitorCordova in Pods (explicit)
+CapacitorApp in Pods, depends on:
+Capacitor in Pods (explicit)
+CapacitorCommunityAppcenterAnalytics in Pods, depends on:
+AppCenter in Pods (explicit)
+AppCenterCapacitorShared in Pods (explicit)
+Capacitor in Pods (explicit)
+CapacitorCommunityAppcenterCrashes in Pods, depends on:
+AppCenter in Pods (explicit)
+AppCenterCapacitorShared in Pods (explicit)
+Capacitor in Pods (explicit)
+SQLCipher in Pods, no dependencies
+ZIPFoundation in Pods, no dependencies
+CapacitorCommunitySqlite in Pods, depends on:
+Capacitor in Pods (explicit)
+SQLCipher in Pods (explicit)
+ZIPFoundation in Pods (explicit)
+CapacitorDialog in Pods, depends on:
+Capacitor in Pods (explicit)
+CapacitorFilesystem in Pods, depends on:
+Capacitor in Pods (explicit)
+CapacitorLocalNotifications in Pods, depends on:
+Capacitor in Pods (explicit)
+CapacitorShare in Pods, depends on:
+Capacitor in Pods (explicit)
+CapawesomeCapacitorBackgroundTask in Pods, depends on:
+Capacitor in Pods (explicit)
+CordovaPlugins in Pods, depends on:
+CapacitorCordova in Pods (explicit)
+Sentry in Pods, no dependencies
+SentryCapacitor in Pods, depends on:
+Capacitor in Pods (explicit)
+Sentry in Pods (explicit)
+Pods-App in Pods, depends on:
+AppCenter in Pods (explicit)
+AppCenterCapacitorShared in Pods (explicit)
+Capacitor in Pods (explicit)
+CapacitorApp in Pods (explicit)
+CapacitorCommunityAppcenterAnalytics in Pods (explicit)
+CapacitorCommunityAppcenterCrashes in Pods (explicit)
+CapacitorCommunitySqlite in Pods (explicit)
+CapacitorCordova in Pods (explicit)
+CapacitorDialog in Pods (explicit)
+CapacitorFilesystem in Pods (explicit)
+CapacitorLocalNotifications in Pods (explicit)
+CapacitorShare in Pods (explicit)
+CapawesomeCapacitorBackgroundTask in Pods (explicit)
+CordovaPlugins in Pods (explicit)
+SQLCipher in Pods (explicit)
+Sentry in Pods (explicit)
+SentryCapacitor in Pods (explicit)
+ZIPFoundation in Pods (explicit)
+App in App, depends on:
+Pods-App in Pods (implicit dependency via file 'Pods_App.framework' in build phase 'Link Binary')
+AppCenterCapacitorShared in Pods (implicit dependency via options '-framework AppCenterCapacitorShared' in build setting 'OTHER_LDFLAGS')
+Capacitor in Pods (implicit dependency via options '-framework Capacitor' in build setting 'OTHER_LDFLAGS')
+CapacitorApp in Pods (implicit dependency via options '-framework CapacitorApp' in build setting 'OTHER_LDFLAGS')
+CapacitorCommunityAppcenterAnalytics in Pods (implicit dependency via options '-framework CapacitorCommunityAppcenterAnalytics' in build setting 'OTHER_LDFLAGS')
+CapacitorCommunityAppcenterCrashes in Pods (implicit dependency via options '-framework CapacitorCommunityAppcenterCrashes' in build setting 'OTHER_LDFLAGS')
+CapacitorCommunitySqlite in Pods (implicit dependency via options '-framework CapacitorCommunitySqlite' in build setting 'OTHER_LDFLAGS')
+CapacitorDialog in Pods (implicit dependency via options '-framework CapacitorDialog' in build setting 'OTHER_LDFLAGS')
+CapacitorFilesystem in Pods (implicit dependency via options '-framework CapacitorFilesystem' in build setting 'OTHER_LDFLAGS')
+CapacitorLocalNotifications in Pods (implicit dependency via options '-framework CapacitorLocalNotifications' in build setting 'OTHER_LDFLAGS')
+CapacitorShare in Pods (implicit dependency via options '-framework CapacitorShare' in build setting 'OTHER_LDFLAGS')
+CapawesomeCapacitorBackgroundTask in Pods (implicit dependency via options '-framework CapawesomeCapacitorBackgroundTask' in build setting 'OTHER_LDFLAGS')
+CapacitorCordova in Pods (implicit dependency via options '-framework Cordova' in build setting 'OTHER_LDFLAGS')
+CordovaPlugins in Pods (implicit dependency via options '-framework CordovaPlugins' in build setting 'OTHER_LDFLAGS')
+SQLCipher in Pods (implicit dependency via options '-framework SQLCipher' in build setting 'OTHER_LDFLAGS')
+Sentry in Pods (implicit dependency via options '-framework Sentry' in build setting 'OTHER_LDFLAGS')
+SentryCapacitor in Pods (implicit dependency via options '-framework SentryCapacitor' in build setting 'OTHER_LDFLAGS')
+ZIPFoundation in Pods (implicit dependency via options '-framework ZIPFoundation' in build setting 'OTHER_LDFLAGS')
