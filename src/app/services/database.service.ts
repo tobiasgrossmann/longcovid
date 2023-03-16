@@ -5,9 +5,7 @@ import { AlertController } from "@ionic/angular";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, from, of } from "rxjs";
 import { switchMap } from "rxjs/operators";
-const { Device, Storage } = Plugins;
-
-import { CapacitorSQLite } from '@capacitor-community/sqlite';
+const { CapacitorSQLite, Device, Storage } = Plugins;
 
 const DB_SETUP_KEY = "patient-strength-mobile-db";
 const DB_NAME_KEY = "patient-strength-mobile-db";

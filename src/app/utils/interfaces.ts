@@ -1,7 +1,7 @@
 export interface Tag {
     id: number;
     date: string;
-    lastModified: string;
+    last_modified: string;
 }
 
 export interface Symptom {

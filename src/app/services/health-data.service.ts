@@ -15,11 +15,10 @@ export class HealthDataService {
   constructor(private health: Health,
     private deviceService: DeviceDetectorService) {
       this.deviceInfo = this.deviceService.getDeviceInfo();
-      console.log("deviceInfo",  this.deviceInfo)
     }
 
   async isHealthAvailable(): Promise<boolean>{
-    return this.deviceInfo.deviceType !== "desktop" && this.health.isAvailable();
+    return this.health.isAvailable();
   }
 
   askForInstallingGoogleFit(){
@@ -48,8 +47,6 @@ export class HealthDataService {
     {
       await this.requestAuthorization();
       return true;
-    } else if (this.deviceInfo.deviceType === "desktop"){
-      return true;
     }
     return this.health.isAuthorized(this.returnPermissions());
   }
@@ -62,13 +59,6 @@ export class HealthDataService {
     endOfDay.setHours(endOfDay.getHours() + 23);
     endOfDay.setMinutes(endOfDay.getMinutes() + 59);
     endOfDay.setSeconds(endOfDay.getSeconds() + 59);
-
-    if (this.deviceInfo.deviceType === "desktop"){
-      return new Promise<HealthData[]>((resolve) => {
-        console.log("queryPrepare empty promise");
-        resolve([]);
-        });
-    }
 
     // only specific variables can use queryAggregated method according to https://github.com/dariosalvi78/cordova-plugin-health
     if(!canQueryBeAggregated){

@@ -410,10 +410,7 @@ static NSString *const HKPluginKeyUUID = @"UUID";
       @"HKCategoryTypeIdentifierSleepAnalysis":@{
         @"HKCategoryValueSleepAnalysisInBed":@(HKCategoryValueSleepAnalysisInBed),
         @"HKCategoryValueSleepAnalysisAsleep":@(HKCategoryValueSleepAnalysisAsleep),
-        @"HKCategoryValueSleepAnalysisAwake":@(HKCategoryValueSleepAnalysisAwake),
-        @"HKCategoryValueSleepAnalysisAsleepCore":@(HKCategoryValueSleepAnalysisAsleepCore),
-        @"HKCategoryValueSleepAnalysisAsleepDeep":@(HKCategoryValueSleepAnalysisAsleepDeep),
-        @"HKCategoryValueSleepAnalysisAsleepREM":@(HKCategoryValueSleepAnalysisAsleepREM)
+        @"HKCategoryValueSleepAnalysisAwake":@(HKCategoryValueSleepAnalysisAwake)
       }
     };
 
@@ -656,7 +653,7 @@ static NSString *const HKPluginKeyUUID = @"UUID";
     HKWorkoutActivityType activityTypeEnum = [WorkoutActivityConversion convertStringToHKWorkoutActivityType:activityType];
 
     BOOL requestReadPermission = (args[@"requestReadPermission"] == nil || [args[@"requestReadPermission"] boolValue]);
-    BOOL *cycling = (args[@"cycling"] != nil && [args[@"cycling"] boolValue]);
+    BOOL *cycling = (args[@"cycling"] == nil || [args[@"cycling"] boolValue]);
 
     // optional energy
     NSNumber *energy = args[@"energy"];
@@ -723,43 +720,27 @@ static NSString *const HKPluginKeyUUID = @"UUID";
                 if (success_save) {
                     // now store the samples, so it shows up in the health app as well (pass this in as an option?)
                     if (energy != nil || distance != nil) {
-                        HKQuantitySample *sampleDistance = nil;
-                        if(distance != nil) {
-                            if(cycling != nil && cycling){
-                                sampleDistance = [HKQuantitySample quantitySampleWithType:[HKQuantityType quantityTypeForIdentifier:
-                                                HKQuantityTypeIdentifierDistanceCycling]
+                        HKQuantitySample *sampleActivity = nil;
+                        if(cycling != nil && cycling){
+                            sampleActivity = [HKQuantitySample quantitySampleWithType:[HKQuantityType quantityTypeForIdentifier:
+                                            HKQuantityTypeIdentifierDistanceCycling]
                                                                                             quantity:nrOfDistanceUnits
                                                                                             startDate:startDate
                                                                                                 endDate:endDate];
-                            } else {
-                                sampleDistance = [HKQuantitySample quantitySampleWithType:[HKQuantityType quantityTypeForIdentifier:
-                                                HKQuantityTypeIdentifierDistanceWalkingRunning]
+                        } else {
+                            sampleActivity = [HKQuantitySample quantitySampleWithType:[HKQuantityType quantityTypeForIdentifier:
+                                            HKQuantityTypeIdentifierDistanceWalkingRunning]
                                                                                             quantity:nrOfDistanceUnits
                                                                                             startDate:startDate
                                                                                                 endDate:endDate];
 
-                            }
                         }
-                        HKQuantitySample *sampleCalories = nil;
-                        if(energy != nil) {
-                            sampleCalories = [HKQuantitySample quantitySampleWithType:[HKQuantityType     quantityTypeForIdentifier:
-                                            HKQuantityTypeIdentifierActiveEnergyBurned]
+                        HKQuantitySample *sampleCalories = [HKQuantitySample quantitySampleWithType:[HKQuantityType quantityTypeForIdentifier:
+                                        HKQuantityTypeIdentifierActiveEnergyBurned]
                                                                                            quantity:nrOfEnergyUnits
                                                                                           startDate:startDate
                                                                                             endDate:endDate];
-                        }
-                         NSArray *samples = nil;
-                         if (energy != nil &&  distance != nil) { 
-                            // both distance and energy
-                            samples = @[sampleDistance, sampleCalories];
-                         } else if (energy != nil &&  distance == nil) { 
-                            // only energy
-                            samples = @[sampleCalories];
-                         } else if (energy == nil &&  distance != nil) {
-                            // only distance
-                            samples = @[sampleDistance];
-                         }
-                        
+                        NSArray *samples = @[sampleActivity, sampleCalories];
 
                         [[HealthKit sharedHealthStore] addSamples:samples toWorkout:workout completion:^(BOOL success_addSamples, NSError *mostInnerError) {
                             if (success_addSamples) {
@@ -796,14 +777,11 @@ static NSString *const HKPluginKeyUUID = @"UUID";
  * @param command *CDVInvokedUrlCommand
  */
 - (void)findWorkouts:(CDVInvokedUrlCommand *)command {
-    NSMutableDictionary *args = command.arguments[0];
     NSPredicate *workoutPredicate = nil;
     // TODO if a specific workouttype was passed, use that
     //  if (false) {
     //    workoutPredicate = [HKQuery predicateForWorkoutsWithWorkoutActivityType:HKWorkoutActivityTypeCycling];
     //  }
-
-    BOOL *includeCalsAndDist = (args[@"includeCalsAndDist"] != nil && [args[@"includeCalsAndDist"] boolValue]);
 
     NSSet *types = [NSSet setWithObjects:[HKWorkoutType workoutType], nil];
     [[HealthKit sharedHealthStore] requestAuthorizationToShareTypes:nil readTypes:types completion:^(BOOL success, NSError *error) {
@@ -834,42 +812,28 @@ static NSString *const HKPluginKeyUUID = @"UUID";
                             //@TODO Update deprecated API call
                             source = workout.source;
                         }
-                        NSMutableDictionary *entry;
 
-                        if(includeCalsAndDist != nil && includeCalsAndDist) {
-                            double meters = [workout.totalDistance doubleValueForUnit:[HKUnit meterUnit]];
-                            NSString *metersString = [NSString stringWithFormat:@"%ld", (long) meters];
+                        // TODO: use a float value, or switch to metric
+                        double miles = [workout.totalDistance doubleValueForUnit:[HKUnit meterUnit]];
+                        NSString *milesString = [NSString stringWithFormat:@"%ld", (long) miles];
 
-                            // Parse totalEnergyBurned in kilocalories
-                            double cals = [workout.totalEnergyBurned doubleValueForUnit:[HKUnit kilocalorieUnit]];
-                            NSString *calories = [[NSNumber numberWithDouble:cals] stringValue];
+                        // Parse totalEnergyBurned in kilocalories
+                        double cals = [workout.totalEnergyBurned doubleValueForUnit:[HKUnit kilocalorieUnit]];
+                        NSString *calories = [[NSNumber numberWithDouble:cals] stringValue];
 
-                            entry = [
+                        NSMutableDictionary *entry = [
                                 @{
                                         @"duration": @(workout.duration),
                                         HKPluginKeyStartDate: [HealthKit stringFromDate:workout.startDate],
                                         HKPluginKeyEndDate: [HealthKit stringFromDate:workout.endDate],
-                                        @"distance": metersString,
+                                        @"distance": milesString,
                                         @"energy": calories,
                                         HKPluginKeySourceBundleId: source.bundleIdentifier,
                                         HKPluginKeySourceName: source.name,
                                         @"activityType": workoutActivity,
                                         @"UUID": [workout.UUID UUIDString]
                                 } mutableCopy
-                            ];
-                        }  else {
-                            entry = [
-                                @{
-                                        @"duration": @(workout.duration),
-                                        HKPluginKeyStartDate: [HealthKit stringFromDate:workout.startDate],
-                                        HKPluginKeyEndDate: [HealthKit stringFromDate:workout.endDate],
-                                        HKPluginKeySourceBundleId: source.bundleIdentifier,
-                                        HKPluginKeySourceName: source.name,
-                                        @"activityType": workoutActivity,
-                                        @"UUID": [workout.UUID UUIDString]
-                                } mutableCopy
-                            ];
-                        }
+                        ];
 
                         [finalResults addObject:entry];
                     }

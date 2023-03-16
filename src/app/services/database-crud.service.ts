@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
-import {CapacitorSQLite, SQLiteDBConnection} from "@capacitor-community/sqlite";
+import {CapacitorSQLite} from "@capacitor-community/sqlite";
 import {checkIfDBExists, deleteDatabase} from "../utils/db-utils";
-import {currentDbVersion, dbUpgrades, patientStrengthStartupData} from "../utils/db-startup-json";
+import {patientStrengthStartupData, patientStrengthStartupSchema} from "../utils/db-startup-json";
 import {SQLiteService} from "./sqlite.service";
 import {DetailService} from "./detail.service";
 // import moment from "moment-timezone";
@@ -10,18 +10,17 @@ import { AktivitaetRepository } from "./db/repository/AktivitaetRepository";
 import { SymptomRepository } from "./db/repository/SymptomRepository";
 import { TagesformRepository } from "./db/repository/TagesformRepository";
 import { Essen } from "../utils/interfaces";
-import { Capacitor } from "@capacitor/core";
 
 @Injectable({
     providedIn: "root"
 })
 export class DatabaseCrudService {
-    dbName = patientStrengthStartupData.database;
+    dbName = "";
     db: any;
     result: any;
     export = null;
     public wantedBackupsNumber: number;
-    private currentDatabaseVersion: number = 2;
+    private currentDatabaseVersion: number;
     public essenRepository: EssenRepository;
     public symptomRepository: SymptomRepository;
     public aktivitaetRepository: AktivitaetRepository;
@@ -73,21 +72,17 @@ export class DatabaseCrudService {
       if (checkExistingConnection === false) {
         console.log(">>>> checkExistingConnection: " + checkExistingConnection);
 
-        console.log(">>>> currentDatabaseVersion 1: " + currentDbVersion);
-
-        if (Capacitor.getPlatform() === "web"){
-            this.sqliteService.initWebStore();
-        }
+        const currentDatabaseVersion: number = await this.getDatabaseVersionFromLocalStorage();
+        console.log(">>>> currentDatabaseVersion: " + currentDatabaseVersion);
 
         this.db = await this.sqliteService
-        .createConnection(this.dbName, false,
-            "no-encryption", currentDbVersion);
-
-        console.log(">>>> this.db createConnection:  " + JSON.stringify(this.db));
-        this.essenRepository = new EssenRepository(this.db);
-        this.symptomRepository = new SymptomRepository(this.db);
-        this.aktivitaetRepository = new AktivitaetRepository(this.db);
-        this.tagesformRepository = new TagesformRepository(this.db);
+          .createConnection(this.dbName, false,
+            "no-encryption", currentDatabaseVersion);
+            console.log(">>>> this.db createConnection:  " + this.db);
+            this.essenRepository = new EssenRepository(this.db);
+            this.symptomRepository = new SymptomRepository(this.db);
+            this.aktivitaetRepository = new AktivitaetRepository(this.db);
+            this.tagesformRepository = new TagesformRepository(this.db);
 
         if (this.db === null) {
           console.log(">>>> this.db = null -> rejecting Promise:  " + this.db);
@@ -147,7 +142,6 @@ export class DatabaseCrudService {
             // check if the databases exist
             // and delete it for multiple successive tests
             await deleteDatabase(this.db);
-            console.log("$$$ patientStrengthStartupData deleted the database $$$");
 
             // full import
             this.result = await this.sqliteService
@@ -160,26 +154,21 @@ export class DatabaseCrudService {
             // open db "db-from-json"
             await this.db.open();
 
-            if (Capacitor.getPlatform() !== "web"){
-
-                // create synchronization table
-                this.result = await this.db.createSyncTable();
-                console.log("createDatabaseFromJSON",JSON.stringify(this.result));
-                if (this.result.changes.changes < 0) {
-                    return Promise.reject(new Error("createDatabaseFromJSON: CreateSyncTable failed cause result.changes.changes < 0"));
-                }
-
-                this.result = await this.db.getSyncDate();
-                if (this.result.length === 0) {
-                    return Promise.reject(new Error("GetSyncDate failed cause this.result.length === 0"));
-                }
-                console.log("$$ syncDate " + this.result);
+            // create synchronization table
+            this.result = await this.db.createSyncTable();
+            if (this.result.changes.changes < 0) {
+                return Promise.reject(new Error("CreateSyncTable failed"));
             }
+
+            this.result = await this.db.getSyncDate();
+            if (this.result.length === 0) {
+                return Promise.reject(new Error("GetSyncDate failed"));
+            }
+            console.log("$$ syncDate " + this.result);
 
             this.detailService.setExportJson(true);
             return Promise.resolve();
         } catch (err) {
-            console.log("createDatabaseFromJSON",JSON.stringify(err));
             return Promise.reject(err);
         }
     }
@@ -213,9 +202,8 @@ export class DatabaseCrudService {
 
             // create synchronization table
             this.result = await this.db.createSyncTable();
-            console.log("createDatabaseFromBackup",JSON.stringify(this.result));
             if (this.result.changes.changes < 0) {
-                return Promise.reject(new Error("createDatabaseFromBackup: CreateSyncTable failed cause this.result.changes.changes < 0"));
+                return Promise.reject(new Error("CreateSyncTable failed"));
             }
 
             this.result = await this.db.getSyncDate();
@@ -227,7 +215,6 @@ export class DatabaseCrudService {
             this.detailService.setExportJson(true);
             return Promise.resolve();
         } catch (err) {
-            console.log("createDatabaseFromBackup",JSON.stringify(err))
             return Promise.reject(err);
         }
     }
@@ -290,46 +277,75 @@ export class DatabaseCrudService {
         }
     }
 
-     async getDatabaseVersion() {
-        try {
-            const version = await this.db.getVersion();
-            return version.version; 
-        } catch (e){
-            console.error(e);
-            return currentDbVersion;
-        }
+     async getDatabaseVersionFromDBandSetToLocalStorage() {
+        const version = await this.db.getVersion();
+        this.currentDatabaseVersion = version.version;
+        console.log("databaseVersion: " + this.currentDatabaseVersion);
+        this.setDatabaseVersionToLocalStorage(this.currentDatabaseVersion);
+        return this.currentDatabaseVersion;
+    }
+
+     async getDatabaseVersionFromLocalStorage() {
+      const version = await localStorage.getItem("databaseVersion");
+      this.currentDatabaseVersion = Number(version);
+      console.log("databaseVersion: " + this.currentDatabaseVersion);
+      return this.currentDatabaseVersion;
+    }
+
+     async setDatabaseVersionToLocalStorage(version: number) {
+      await localStorage.setItem("databaseVersion", version.toString());
     }
 
     async upgradeDatabaseSchema() {
+      console.log(">>>> upgradeDatabaseSchema start");
 
-        for (const dbUpgrade of dbUpgrades) 
-        {
-            await this.sqliteService.addUpgradeStatement(
-                this.dbName,
-                dbUpgrade.toVersion,
-                dbUpgrade.statements); 
-               
-            if (await this.checkIsDatabaseConnection()){
-                await this.sqliteService.closeConnection(this.dbName);
-            }
+      const currentDatabaseVersion: number = await this.getDatabaseVersionFromDBandSetToLocalStorage();
+      console.log(">>>> currentDatabaseVersion: " + currentDatabaseVersion);
 
-            let tempConnection = await this.sqliteService
-                .createConnection(this.dbName, false,
-                "no-encryption", dbUpgrade.toVersion);  
-  
-            console.log(">>>>>> Connected to version " + dbUpgrade.toVersion);
-            await tempConnection.open();   
- 
-            console.log(">>>>>> Opened version " + (await tempConnection.getVersion()).version);
+      const futureDatabaseVersion: number = currentDatabaseVersion + 1;
+      console.log(">>>> futureDatabaseVersion: " + futureDatabaseVersion);
 
-            await this.sqliteService
-                .closeConnection(this.dbName);
-        };
+      const currentDatabase: any = await this.db.exportToJson("full");
+      console.log(">>>> currentDatabase: " + currentDatabase);
+
+      await this.sqliteService.closeConnection(this.dbName);
+      console.log(">>>> closed old Connection");
+
+      console.log(">>>> addUpgradeStatement start");
+
+      await this.sqliteService.addUpgradeStatement(
+          this.dbName,
+        currentDatabaseVersion,
+        futureDatabaseVersion,
+          patientStrengthStartupSchema,
+          currentDatabase.export.values
+      );
+      console.log(">>>> addUpgradeStatement done");
+
+      console.log(">>>> creating Connection again");
+      // open the database
+      this.db = await this.sqliteService
+          .createConnection(this.dbName, false,
+              "no-encryption", futureDatabaseVersion);
+      console.log(">>>> created Connection: " + this.db);
+
+      if (this.db === null) {
+          console.log(">>>> this.db = null -> rejecting Promise:  " + this.db);
+          return Promise.reject(new Error("CreateConnection" + this.dbName + "failed"));
+      }
+
+      console.log(">>>> open Database again");
+      await this.db.open();
+      console.log(">>>> Hurray! Database again opened");
+
 
     }
 
     async openDatabase() {
         await this.db.open();
+/*
+        console.log("Opened Database!");
+*/
     }
 
     // Mode is either "partial" or "full"
@@ -376,7 +392,6 @@ export class DatabaseCrudService {
         }
     }
 
-
     async getTagesInRnage(startIndex: number, limit: number): Promise<any> {
         const t0 = performance.now();
         const queryStatement = "SELECT * FROM tage ORDER BY date DESC LIMIT " + limit + " OFFSET " + startIndex + ";";
@@ -414,33 +429,7 @@ export class DatabaseCrudService {
         return this.tagesformRepository.findAll();
     }
 
-    async getListAndIdDate(from:Date, to :Date, tableName:string): Promise<any> {
-
-        const queryStatement = 
-        `SELECT * FROM tage INNER JOIN ${tableName} ON ${tableName}.tageid = tage.id 
-            WHERE date > '${from.toISOString()}' AND date <= '${to.toISOString()}' 
-            ORDER BY date DESC;`;
-        const queryResult = await this.db.query(queryStatement);
-        if (queryResult === undefined) {
-            throw new Error("Query failed:" + queryStatement);
-        } else {
-            return queryResult;
-        }
-    }
-
-    async getTagesformListAndIdDate(from:Date, to :Date): Promise<any> {
-        return await this.getListAndIdDate(from, to, 'tagesform');
-    }
-
-    async getAktivitaetenListAndIdDate(from:Date, to :Date): Promise<any> {
-        return await this.getListAndIdDate(from, to, 'aktivitaeten');
-    }
-
-    async getSymptomeListAndIdDate(from:Date, to :Date): Promise<any> {
-        return await this.getListAndIdDate(from, to, 'symptome');
-    }
-
-    async getTagesformDateRange(): Promise<any> {
+    async getTagesformListAndIdDate(): Promise<any> {
         const queryStatement = "SELECT * FROM tage INNER JOIN tagesform ON tagesform.tageid = tage.id ORDER BY date DESC;";
         const queryResult = await this.db.query(queryStatement);
         if (queryResult === undefined) {
@@ -555,6 +544,26 @@ export class DatabaseCrudService {
         }
     }
 
+    /*
+    * CHECK DATE SERVICES
+    * */
+
+    // async checkSameDate(date: string): Promise<boolean> {
+    //     console.log(date);
+    //     console.log(date.slice(0,10));
+    //     const queryStatementTagQuery = "SELECT date FROM tage ORDER BY date DESC;";
+    //     const queryResultTagQuery = await this.db.query(queryStatementTagQuery);
+    //     console.log(queryResultTagQuery);
+    //     if (queryResultTagQuery.values.length > 0) {
+    //         const d = moment(date).isSame(queryResultTagQuery.values[0]?.date, "day");
+    //         console.log(d);
+    //         return moment(date).isSame(queryResultTagQuery.values[0]?.date, "day");
+    //     } else if (queryResultTagQuery.values.length === 0) {
+    //         return false;
+    //     }
+    // }
+
+
     async checkSameDateAnyDay(date: string): Promise<boolean> {
         console.log(date);
         const searchDate = date.slice(0,10);
@@ -585,10 +594,10 @@ export class DatabaseCrudService {
             const queryStatementTagQuery = `SELECT * FROM tage WHERE date = '${date}';`;
             const queryResultTagQuery = await this.db.query(queryStatementTagQuery);
 
-            await this.postNeuesEssen(queryResultTagQuery.values[0]?.id);
-            await this.postNeueSymptome(queryResultTagQuery.values[0]?.id);
-            await this.postNeueTagesform(queryResultTagQuery.values[0]?.id);
-            await this.postNeueAktivitaeten(queryResultTagQuery.values[0]?.id);
+            this.postNeuesEssen(queryResultTagQuery.values[0]?.id);
+            this.postNeueSymptome(queryResultTagQuery.values[0]?.id);
+            this.postNeueTagesform(queryResultTagQuery.values[0]?.id);
+            this.postNeueAktivitaeten(queryResultTagQuery.values[0]?.id);
 
             if (queryResultTagQuery === undefined) {
                 throw new Error("Execution failed:" + queryResultTagQuery);

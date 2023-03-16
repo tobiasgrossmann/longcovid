@@ -3,7 +3,7 @@
         <ion-img class="ml-2" id="ion-logo" slot="start" src="/assets/images/patient-strength_logo.png"></ion-img>
         <ion-title *ngIf="deviceInfo.os === 'Android'" slot="start" class="ion-padding-right-0">{{ 'timeline' |
             translate }}</ion-title>
-        <ion-title *ngIf="deviceInfo.os === 'iOS'  || deviceInfo.os === 'Windows'" slot="start">{{ 'timeline' | translate }}</ion-title>
+        <ion-title *ngIf="deviceInfo.os === 'iOS'" slot="start">{{ 'timeline' | translate }}</ion-title>
 
         <ion-buttons slot="end">
             <ion-button class="m-0 p-0" expand="block" fill="clear" routerLink="/analyse">
@@ -44,7 +44,7 @@
                                                     name="help-outline"></ion-icon>
                                             </ng-template>
                                         </ng-container>
-                                        <ng-container *ngIf="deviceInfo.os === 'iOS' || deviceInfo.os === 'Windows'">
+                                        <ng-container *ngIf="deviceInfo.os === 'iOS'">
                                             <ion-icon
                                                 *ngIf="((symptom.symptomNames !== (undefined || null || 'null' || '')) || symptom.symptomNamesCheckboxes !== (undefined || null || 'null' || '')) &&
                       (essen.vormittag !== (undefined || null || 'null' || '') || essen.mittag !== (undefined || null || 'null' || '') || essen.abend !== (undefined || null || 'null' || '')); else helpIcon"
@@ -112,7 +112,7 @@
                                 </ion-card>
                             </ng-container>
 
-                            <ng-container *ngIf="deviceInfo.os === 'iOS' || deviceInfo.os === 'Windows'">
+                            <ng-container *ngIf="deviceInfo.os === 'iOS'">
                                 <ion-card
                                     *ngIf="symptom.symptomNames === (null && 'null' && '') && symptom.symptomNamesCheckboxes === (null && 'null' && '')"
                                     class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
@@ -201,7 +201,7 @@
                                 </ion-card>
                             </ng-container>
 
-                            <ng-container *ngIf="deviceInfo.os === 'iOS' || deviceInfo.os === 'Windows'">
+                            <ng-container *ngIf="deviceInfo.os === 'iOS'">
                                 <ion-card
                                     *ngIf="essen.vormittag === (null && 'null' && '') && essen.mittag === (null && 'null' && '') && essen.abend === (null && 'null' && '') && essen.medikamenteValue === (null && 'null' && '')"
                                     class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
@@ -297,7 +297,7 @@
                                 </ion-card>
                             </ng-container>
 
-                            <ng-container *ngIf="deviceInfo.os === 'iOS' || deviceInfo.os === 'Windows'">
+                            <ng-container *ngIf="deviceInfo.os === 'iOS'">
                                 <ion-card
                                     *ngIf="tagesform.tagesformValue === null && tagesform.erschoepfungsartValue === null && tagesform.schlafValue === null && tagesform.stimmungValue === null"
                                     class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
@@ -393,7 +393,7 @@
                             </ng-container>
 
 
-                            <ng-container *ngIf="deviceInfo.os === 'iOS' || deviceInfo.os === 'Windows'">
+                            <ng-container *ngIf="deviceInfo.os === 'iOS'">
                                 <ion-card
                                     *ngIf="aktivitaet.aktivitaetenNames === (null && 'null' && '') && aktivitaet.aktivitaetenNamesCheckboxes === (null && 'null' && '')"
                                     class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
@@ -465,6 +465,14 @@
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>
 
+    <!--    <ion-button (click)="presentDeleteAlert()"
+                class="h-2 w-100 pt-reset-button"
+                expand="block"
+                fill="clear"
+                size="default"
+    >
+        {{ 'tagebuch-timeline.daten-zurücksetzen' | translate }}
+    </ion-button>-->
 
 </ion-content>
 

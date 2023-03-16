@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit} from "@angular/core";
-import {UntypedFormBuilder, UntypedFormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {SQLiteService} from "../../services/sqlite.service";
 import {DetailService} from "../../services/detail.service";
 import {DatabaseCrudService} from "../../services/database-crud.service";
@@ -15,7 +15,7 @@ import {TranslateService} from "@ngx-translate/core";
 })
 export class EssenErfassenPage implements OnInit, AfterViewInit {
 
-    public form: UntypedFormGroup;
+    public form: FormGroup;
     public essen: Array<Essen> = [];
     public vormittagEssen = "";
     public mittagEssen = "";
@@ -24,7 +24,7 @@ export class EssenErfassenPage implements OnInit, AfterViewInit {
     private readonly tagId;
 
     constructor(
-        private fb: UntypedFormBuilder,
+        private fb: FormBuilder,
         private sqliteService: SQLiteService,
         private detailService: DetailService,
         private databaseCrudService: DatabaseCrudService,
@@ -52,7 +52,7 @@ export class EssenErfassenPage implements OnInit, AfterViewInit {
     loadEssen(): any {
         this.databaseCrudService.getEssenListbyTagId(this.tagId)
             .then(res => {
-                if (res && Array.isArray(res.values) && res.values[0]?.vormittag) {
+                if (res.values[0].vormittag) {
                     this.vormittagEssen = res.values[0]?.vormittag;
                     console.log(this.vormittagEssen);
                     this.form.patchValue({
@@ -60,7 +60,7 @@ export class EssenErfassenPage implements OnInit, AfterViewInit {
                     });
                 }
 
-                if (res && Array.isArray(res.values) && res.values[0]?.mittag) {
+                if (res.values[0].mittag) {
                     this.mittagEssen = res.values[0]?.mittag;
                     console.log(this.mittagEssen);
                     this.form.patchValue({
@@ -68,7 +68,7 @@ export class EssenErfassenPage implements OnInit, AfterViewInit {
                     });
                 }
 
-                if (res && Array.isArray(res.values) && res.values[0]?.abend) {
+                if (res.values[0].abend) {
                     this.abendEssen = res.values[0]?.abend;
                     console.log(this.abendEssen);
                     this.form.patchValue({
@@ -76,7 +76,7 @@ export class EssenErfassenPage implements OnInit, AfterViewInit {
                     });
                 }
 
-                if (res && Array.isArray(res.values) && res.values[0]?.medikamenteValue) {
+                if (res.values[0].medikamenteValue) {
                     this.medikamenteValue = res.values[0]?.medikamenteValue;
                     console.log(this.medikamenteValue);
                     this.form.patchValue({

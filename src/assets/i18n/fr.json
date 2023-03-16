@@ -45,16 +45,6 @@
   "koerperlich": "Physique",
   "sehr-koerperlich": "Très physique",
 
-  "day0": "Dim",
-  "day1": "Lun",
-  "day2": "Mar",
-  "day3": "Mer",
-  "day4": "Jeu",
-  "day5": "Ven",
-  "day6": "Sam",
-
-  "dashboard": "Evolution",
-  
   "article":{
     "article": "Article",
     "source":"La source",

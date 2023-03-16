@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit} from "@angular/core";
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Backup, Language} from "../../utils/interfaces";
 import {TranslateService} from "@ngx-translate/core";
 import {SQLiteService} from "../../services/sqlite.service";
@@ -16,7 +16,7 @@ import {AlertController} from "@ionic/angular";
 })
 export class EinstellungenPage implements OnInit, AfterViewInit {
 
-    public languageForm: UntypedFormGroup;
+    public languageForm: FormGroup;
     public languages: Language[] = [
         {
             id: 1,
@@ -35,19 +35,19 @@ export class EinstellungenPage implements OnInit, AfterViewInit {
         }
     ];
 
-    public countryForm: UntypedFormGroup;
+    public countryForm: FormGroup;
     public countries: string[] = [];
     public curentLanguage: string;
     public currentCountry: string;
 
     public wantedBackupsNumber: number = this.databaseCrudService.getWantedBackupsNumber();
     public defaultBackup: Backup = null;
-    public backupForm: UntypedFormGroup;
+    public backupForm: FormGroup;
     public backups: Backup[] = [];
     public selectedBackup;
     public jsonResponse;
     constructor(
-        private fb: UntypedFormBuilder,
+        private fb: FormBuilder,
         public translateService: TranslateService,
         private sqliteService: SQLiteService,
         private detailService: DetailService,
@@ -202,13 +202,12 @@ export class EinstellungenPage implements OnInit, AfterViewInit {
         path: "backups",
       }).then(response => {
         console.log(response);
-        console.log(JSON.stringify(response.files));
+        console.log(response.files);
 
         response.files.forEach((item: any) => {
-          let itemName = item.name;
-          console.log("itemName");
-          console.log(itemName);
-          const itemWithoutEnding = itemName.replace(".ts", "");
+          console.log("item");
+          console.log(item);
+          const itemWithoutEnding = item.replace(".ts", "");
           console.log(itemWithoutEnding);
           console.log(this.backups.find(x => x.name === (itemWithoutEnding)));
 

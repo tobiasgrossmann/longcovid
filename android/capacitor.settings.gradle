@@ -2,8 +2,11 @@
 include ':capacitor-android'
 project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/android/capacitor')
 
-include ':capacitor-community-sqlite'
-project(':capacitor-community-sqlite').projectDir = new File('../node_modules/@capacitor-community/sqlite/android')
+include ':capacitor-community-appcenter-analytics'
+project(':capacitor-community-appcenter-analytics').projectDir = new File('../node_modules/@capacitor-community/appcenter-analytics/android')
+
+include ':capacitor-community-appcenter-crashes'
+project(':capacitor-community-appcenter-crashes').projectDir = new File('../node_modules/@capacitor-community/appcenter-crashes/android')
 
 include ':capacitor-app'
 project(':capacitor-app').projectDir = new File('../node_modules/@capacitor/app/android')
@@ -14,11 +17,14 @@ project(':capacitor-dialog').projectDir = new File('../node_modules/@capacitor/d
 include ':capacitor-filesystem'
 project(':capacitor-filesystem').projectDir = new File('../node_modules/@capacitor/filesystem/android')
 
-include ':capacitor-local-notifications'
-project(':capacitor-local-notifications').projectDir = new File('../node_modules/@capacitor/local-notifications/android')
-
 include ':capacitor-share'
 project(':capacitor-share').projectDir = new File('../node_modules/@capacitor/share/android')
 
-include ':capawesome-capacitor-background-task'
-project(':capawesome-capacitor-background-task').projectDir = new File('../node_modules/@capawesome/capacitor-background-task/android')
+include ':robingenz-capacitor-background-task'
+project(':robingenz-capacitor-background-task').projectDir = new File('../node_modules/@robingenz/capacitor-background-task/android')
+
+include ':sentry-capacitor'
+project(':sentry-capacitor').projectDir = new File('../node_modules/@sentry/capacitor/android')
+
+include ':capacitor-community-sqlite'
+project(':capacitor-community-sqlite').projectDir = new File('../node_modules/@capacitor-community/sqlite/android')

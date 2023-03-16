@@ -17,15 +17,25 @@ export class KnowledgePage implements OnInit, OnDestroy {
     private articleService: ArticleService,
   ) {
     this.deviceInfo = this.deviceService.getDeviceInfo();
-
   }
 
   ngOnInit() {
+    this.translateService.onLangChange.subscribe(() => {
+      this.articleService.loadArticleList(this.translateService.currentLang);
+      this.articles = this.articleService.getArticleListForknowledge();
+    });
+
     const lang = this.translateService.currentLang;
-    this.articleService.loadArticleList(lang);
-    this.articles = this.articleService.getArticleListForknowledge();
+    if(lang === "de" || lang === "fr" || lang === "en"){
+      this.articleService.loadArticleList(lang);
+      this.articles = this.articleService.getArticleListForknowledge();
+    }
+    else{
+      throw new Error("Unknown language");
+    }
   }
 
   ngOnDestroy() {
+    this.translateService.onLangChange.unsubscribe();
   }
 }

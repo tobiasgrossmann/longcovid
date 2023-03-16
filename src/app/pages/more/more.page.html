@@ -9,13 +9,6 @@
 
 <ion-content class="more-content">
   <ion-nav>
-    <ion-item button routerLink="/knowledge">
-      <ion-icon class="icon-left" slot="start" size="large" name="book-outline"></ion-icon>
-      <ion-label>
-        <p class="nav-option">{{ 'wissen' | translate }}</p>
-      </ion-label>
-      <ion-icon *ngIf="deviceInfo.os !== 'iOS'" class="icon-right" slot="end" size="large" name="chevron-forward-outline"></ion-icon>
-    </ion-item>
     <ion-item button routerLink="/einstellungen">
       <ion-icon class="icon-left" slot="start" size="large" name="settings-sharp"></ion-icon>
       <ion-label>

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit } from "@angular/core";
-import {UntypedFormBuilder, UntypedFormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {SQLiteService} from "../../services/sqlite.service";
 import {DetailService} from "../../services/detail.service";
 import {DatabaseCrudService} from "../../services/database-crud.service";
@@ -14,7 +14,7 @@ import {TranslateService} from "@ngx-translate/core";
 })
 export class TagesformErfassenPage implements OnInit, AfterViewInit {
 
-  public form: UntypedFormGroup;
+  public form: FormGroup;
   public tagesformValue: number = null;
   public erschoepfungsartValue: number = null;
   public schlafValue: number = null;
@@ -22,7 +22,7 @@ export class TagesformErfassenPage implements OnInit, AfterViewInit {
   private readonly tagId;
 
   constructor(
-      private fb: UntypedFormBuilder,
+      private fb: FormBuilder,
       private sqliteService: SQLiteService,
       private detailService: DetailService,
       private databaseCrudService: DatabaseCrudService,
@@ -53,10 +53,10 @@ export class TagesformErfassenPage implements OnInit, AfterViewInit {
         .then(res => {
           if (res.values) {
               console.log(res);
-              this.tagesformValue = res.values[0]?.tagesformValue;
-              this.erschoepfungsartValue = res.values[0]?.erschoepfungsartValue;
-              this.schlafValue = res.values[0]?.schlafValue;
-              this.stimmungValue = res.values[0]?.stimmungValue;
+              this.tagesformValue = res.values[0].tagesformValue;
+              this.erschoepfungsartValue = res.values[0].erschoepfungsartValue;
+              this.schlafValue = res.values[0].schlafValue;
+              this.stimmungValue = res.values[0].stimmungValue;
 
               this.form.patchValue(
                   {
@@ -92,12 +92,12 @@ export class TagesformErfassenPage implements OnInit, AfterViewInit {
             .then(res => {
                 console.log(res);
                 if (res.values) {
-                    console.log(res.values[0]?.tagesformValue);
-                    console.log(res.values[0]?.erschoepfungsartValue);
-                    this.tagesformValue = res.values[0]?.tagesformValue;
-                    this.erschoepfungsartValue = res.values[0]?.erschoepfungsartValue;
-                    this.schlafValue = res.values[0]?.schlafValue;
-                    this.stimmungValue = res.values[0]?.stimmungValue;
+                    console.log(res.values[0].tagesformValue);
+                    console.log(res.values[0].erschoepfungsartValue);
+                    this.tagesformValue = res.values[0].tagesformValue;
+                    this.erschoepfungsartValue = res.values[0].erschoepfungsartValue;
+                    this.schlafValue = res.values[0].schlafValue;
+                    this.stimmungValue = res.values[0].stimmungValue;
                     this.form.patchValue(
                         {
                             erschoepfungsart: this.erschoepfungsartValue,

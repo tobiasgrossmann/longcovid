@@ -19,18 +19,11 @@ const routes: Routes = [
           name: "tagebuch-timeline"
         }
       },
-      // {
-      //   path: "wissen",
-      //   loadChildren: () => import("../../pages/knowledge/knowledge.module").then(m => m.KnowledgePageModule),
-      //   data: {
-      //     name: "wissen"
-      //   }
-      // },
       {
-        path: "dashboard",
-        loadChildren: () => import("../../pages/dashboard/dashboard.module").then(m => m.DashboardPageModule),
+        path: "wissen",
+        loadChildren: () => import("../../pages/knowledge/knowledge.module").then(m => m.KnowledgePageModule),
         data: {
-          name: "dashboard"
+          name: "wissen"
         }
       },
       {

@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit} from "@angular/core";
-import {UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {SQLiteService} from "../../services/sqlite.service";
 import {DetailService} from "../../services/detail.service";
 import {DatabaseCrudService} from "../../services/database-crud.service";
@@ -15,7 +15,7 @@ import {TranslateService} from "@ngx-translate/core";
 })
 export class SymptomeErfassenPage implements OnInit, AfterViewInit {
 
-    public form: UntypedFormGroup;
+    public form: FormGroup;
     public symptome: Array<Symptom> = [];
     public symptomeNameListe: string;
     public symptomeCheckboxListeArray: any;
@@ -110,7 +110,7 @@ export class SymptomeErfassenPage implements OnInit, AfterViewInit {
     private readonly tagId;
 
     constructor(
-        private fb: UntypedFormBuilder,
+        private fb: FormBuilder,
         private sqliteService: SQLiteService,
         private detailService: DetailService,
         private databaseCrudService: DatabaseCrudService,
@@ -144,7 +144,7 @@ export class SymptomeErfassenPage implements OnInit, AfterViewInit {
     }
 
     onLoadCheckboxStatus() {
-        const symptomeCheckboxListe: UntypedFormArray = this.form.get("symptomeCheckboxListe") as UntypedFormArray;
+        const symptomeCheckboxListe: FormArray = this.form.get("symptomeCheckboxListe") as FormArray;
         this.symptomeCheckboxListe.forEach(o => {
             this.updateCheckControl(symptomeCheckboxListe, o);
         });
@@ -162,48 +162,48 @@ export class SymptomeErfassenPage implements OnInit, AfterViewInit {
             .then(res => {
                 if (res.values) {
 
-                    if (res && Array.isArray(res.values) && res.values[0]?.symptomNames) {
-                        this.symptomeNameListe = res.values[0]?.symptomNames;
+                    if (res.values[0].symptomNames) {
+                        this.symptomeNameListe = res.values[0].symptomNames;
                         this.form.patchValue({symptomeListe: this.symptomeNameListe});
                     }
 
-                    if (res && Array.isArray(res.values) && res.values[0]?.symptomNamesCheckboxes) {
+                    if (res.values[0].symptomNamesCheckboxes) {
 
-                        this.symptomeCheckboxListe[0].number_value = res.values[0]?.hustenValue;
-                        this.symptomeCheckboxListe[1].number_value = res.values[0]?.fieberValue;
-                        this.symptomeCheckboxListe[2].number_value = res.values[0]?.fatigueValue;
-                        this.symptomeCheckboxListe[3].number_value = res.values[0]?.kurzatmigkeitValue;
-                        this.symptomeCheckboxListe[4].number_value = res.values[0]?.brustschmerzenValue;
-                        this.symptomeCheckboxListe[5].number_value = res.values[0]?.kopfschmerzenValue;
-                        this.symptomeCheckboxListe[6].number_value = res.values[0]?.geschmacksverlustValue;
-                        this.symptomeCheckboxListe[7].number_value = res.values[0]?.neurologischeStoerungValue;
-                        this.symptomeCheckboxListe[8].number_value = res.values[0]?.muskelschmerzenValue;
-                        this.symptomeCheckboxListe[9].number_value = res.values[0]?.hautausschlagValue;
-                        this.symptomeCheckboxListe[10].number_value = res.values[0]?.missempfindungenValue;
-                        this.symptomeCheckboxListe[11].number_value = res.values[0]?.schwindelValue;
-                        this.symptomeCheckboxListe[12].number_value = res.values[0]?.gedaechtniseinschraenkungenValue;
-                        this.symptomeCheckboxListe[13].number_value = res.values[0]?.leseeinschraenkungenValue;
+                        this.symptomeCheckboxListe[0].number_value = res.values[0].hustenValue;
+                        this.symptomeCheckboxListe[1].number_value = res.values[0].fieberValue;
+                        this.symptomeCheckboxListe[2].number_value = res.values[0].fatigueValue;
+                        this.symptomeCheckboxListe[3].number_value = res.values[0].kurzatmigkeitValue;
+                        this.symptomeCheckboxListe[4].number_value = res.values[0].brustschmerzenValue;
+                        this.symptomeCheckboxListe[5].number_value = res.values[0].kopfschmerzenValue;
+                        this.symptomeCheckboxListe[6].number_value = res.values[0].geschmacksverlustValue;
+                        this.symptomeCheckboxListe[7].number_value = res.values[0].neurologischeStoerungValue;
+                        this.symptomeCheckboxListe[8].number_value = res.values[0].muskelschmerzenValue;
+                        this.symptomeCheckboxListe[9].number_value = res.values[0].hautausschlagValue;
+                        this.symptomeCheckboxListe[10].number_value = res.values[0].missempfindungenValue;
+                        this.symptomeCheckboxListe[11].number_value = res.values[0].schwindelValue;
+                        this.symptomeCheckboxListe[12].number_value = res.values[0].gedaechtniseinschraenkungenValue;
+                        this.symptomeCheckboxListe[13].number_value = res.values[0].leseeinschraenkungenValue;
 
                         //patch values from database to form
                         this.form.patchValue({
-                            hustenValue: res.values[0]?.hustenValue,
-                            fieberValue: res.values[0]?.fieberValue,
-                            fatigueValue: res.values[0]?.fatigueValue,
-                            kurzatmigkeitValue: res.values[0]?.kurzatmigkeitValue,
-                            brustschmerzenValue: res.values[0]?.brustschmerzenValue,
-                            kopfschmerzenValue: res.values[0]?.kopfschmerzenValue,
-                            geschmacksverlustValue: res.values[0]?.geschmacksverlustValue,
-                            neurologischeStoerungValue: res.values[0]?.neurologischeStoerungValue,
-                            muskelschmerzenValue: res.values[0]?.muskelschmerzenValue,
-                            hautausschlagValue: res.values[0]?.hautausschlagValue,
-                            missempfindungenValue: res.values[0]?.missempfindungenValue,
-                            schwindelValue: res.values[0]?.schwindelValue,
-                            gedaechtniseinschraenkungenValue: res.values[0]?.gedaechtniseinschraenkungenValue,
-                            leseeinschraenkungenValue: res.values[0]?.leseeinschraenkungenValue
+                            hustenValue: res.values[0].hustenValue,
+                            fieberValue: res.values[0].fieberValue,
+                            fatigueValue: res.values[0].fatigueValue,
+                            kurzatmigkeitValue: res.values[0].kurzatmigkeitValue,
+                            brustschmerzenValue: res.values[0].brustschmerzenValue,
+                            kopfschmerzenValue: res.values[0].kopfschmerzenValue,
+                            geschmacksverlustValue: res.values[0].geschmacksverlustValue,
+                            neurologischeStoerungValue: res.values[0].neurologischeStoerungValue,
+                            muskelschmerzenValue: res.values[0].muskelschmerzenValue,
+                            hautausschlagValue: res.values[0].hautausschlagValue,
+                            missempfindungenValue: res.values[0].missempfindungenValue,
+                            schwindelValue: res.values[0].schwindelValue,
+                            gedaechtniseinschraenkungenValue: res.values[0].gedaechtniseinschraenkungenValue,
+                            leseeinschraenkungenValue: res.values[0].leseeinschraenkungenValue
                         });
 
                         //split string data from database into array
-                        this.symptomeCheckboxListeArray = res.values[0]?.symptomNamesCheckboxes.split(",");
+                        this.symptomeCheckboxListeArray = res.values[0].symptomNamesCheckboxes.split(",");
                         //loop through array
                         this.symptomeCheckboxListeArray.forEach((item: string) => {
                             //if array item can be identified as possible activity then go on
@@ -248,24 +248,24 @@ export class SymptomeErfassenPage implements OnInit, AfterViewInit {
         )
             .then(res => {
                 if (res.values) {
-                    this.symptomeNameListe = res.values[0]?.symptomNames;
-                    this.symptomeCheckboxListeArray = res.values[0]?.symptomNamesCheckboxes;
+                    this.symptomeNameListe = res.values[0].symptomNames;
+                    this.symptomeCheckboxListeArray = res.values[0].symptomNamesCheckboxes;
                     this.form.patchValue({
                         symptomeListe: this.symptomeNameListe,
-                        hustenValue: res.values[0]?.hustenValue,
-                        fieberValue: res.values[0]?.fieberValue,
-                        fatigueValue: res.values[0]?.fatigueValue,
-                        kurzatmigkeitValue: res.values[0]?.kurzatmigkeitValue,
-                        brustschmerzenValue: res.values[0]?.brustschmerzenValue,
-                        kopfschmerzenValue: res.values[0]?.kopfschmerzenValue,
-                        geschmacksverlustValue: res.values[0]?.geschmacksverlustValue,
-                        neurologischeStoerungValue: res.values[0]?.neurologischeStoerungValue,
-                        muskelschmerzenValue: res.values[0]?.muskelschmerzenValue,
-                        hautausschlagValue: res.values[0]?.hautausschlagValue,
-                        missempfindungenValue: res.values[0]?.missempfindungenValue,
-                        schwindelValue: res.values[0]?.schwindelValue,
-                        gedaechtniseinschraenkungenValue: res.values[0]?.gedaechtniseinschraenkungenValue,
-                        leseeinschraenkungenValue: res.values[0]?.leseeinschraenkungenValue
+                        hustenValue: res.values[0].hustenValue,
+                        fieberValue: res.values[0].fieberValue,
+                        fatigueValue: res.values[0].fatigueValue,
+                        kurzatmigkeitValue: res.values[0].kurzatmigkeitValue,
+                        brustschmerzenValue: res.values[0].brustschmerzenValue,
+                        kopfschmerzenValue: res.values[0].kopfschmerzenValue,
+                        geschmacksverlustValue: res.values[0].geschmacksverlustValue,
+                        neurologischeStoerungValue: res.values[0].neurologischeStoerungValue,
+                        muskelschmerzenValue: res.values[0].muskelschmerzenValue,
+                        hautausschlagValue: res.values[0].hautausschlagValue,
+                        missempfindungenValue: res.values[0].missempfindungenValue,
+                        schwindelValue: res.values[0].schwindelValue,
+                        gedaechtniseinschraenkungenValue: res.values[0].gedaechtniseinschraenkungenValue,
+                        leseeinschraenkungenValue: res.values[0].leseeinschraenkungenValue
                     });
                 }
                 this.toastService.showSuccessToast(this.translateService.instant("symptome-erfassen-page.success"));
@@ -278,16 +278,16 @@ export class SymptomeErfassenPage implements OnInit, AfterViewInit {
     }
 
     onSelectionChange(event: any, item: any) {
-        const symptomeCheckboxListe: UntypedFormArray = this.form.get("symptomeCheckboxListe") as UntypedFormArray;
+        const symptomeCheckboxListe: FormArray = this.form.get("symptomeCheckboxListe") as FormArray;
         this.symptomeCheckboxListe[item].checked = event.target.checked;
         this.updateCheckControl(symptomeCheckboxListe, event.target);
     }
 
     updateCheckControl(cal, object) {
         if (object.checked) {
-            cal.push(new UntypedFormControl(object.value));
+            cal.push(new FormControl(object.value));
         } else {
-            cal.controls.forEach((item: UntypedFormControl, index) => {
+            cal.controls.forEach((item: FormControl, index) => {
                 if (item.value === object.value) {
                     cal.removeAt(index);
                     return;

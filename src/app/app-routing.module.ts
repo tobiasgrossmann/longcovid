@@ -31,16 +31,8 @@ const routes: Routes = [
     loadChildren: () => import("./pages/impressum/impressum.module").then( m => m.ImpressumPageModule)
   },
   {
-    path: "knowledge",
-    loadChildren: () => import("./pages/knowledge/knowledge.module").then( m => m.KnowledgePageModule)
-  },
-  {
     path: "einstellungen",
     loadChildren: () => import("./pages/einstellungen/einstellungen.module").then( m => m.EinstellungenPageModule)
-  },
-  {
-    path: "dashboard",
-    loadChildren: () => import("./pages/dashboard/dashboard.module").then( m => m.DashboardPageModule)
   },
   {
     path: "splash",

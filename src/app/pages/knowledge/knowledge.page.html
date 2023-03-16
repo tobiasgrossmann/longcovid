@@ -1,8 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-  </ion-buttons>
+    <ion-img class="ml-2" id="ion-logo" slot="start" src="/assets/images/patient-strength_logo.png"></ion-img>
     <ion-title *ngIf="deviceInfo.os === 'Android'"  class="ion-padding-right-0" mode=ios>{{ "wissen" |
       translate }}</ion-title>
     <ion-title *ngIf="deviceInfo.os === 'iOS'" mode=ios>{{ "wissen" | translate }}</ion-title>

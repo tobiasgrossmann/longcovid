@@ -28,21 +28,17 @@ import localeDeExtra from "@angular/common/locales/extra/de";
 
 import * as Sentry from "@sentry/angular";
 import { Health } from "@awesome-cordova-plugins/health/ngx";
-import { BackupService } from "./services/backup.service";
-import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
     declarations: [
         AppComponent
     ],
+    entryComponents: [],
     imports: [
         ReactiveFormsModule,
         FormsModule,
         HttpClientModule,
         BrowserModule,
-        NgxEchartsModule.forRoot({
-            echarts: () => import('echarts')
-          }),
         IonicModule.forRoot({
             swipeBackEnabled: true
         }),
@@ -58,13 +54,11 @@ import { NgxEchartsModule } from 'ngx-echarts';
     providers: [
         Health,
         StatusBar,
-        // LocalNotifications,
         SQLiteService,
-        BackupService,
         DetailService,
-        { provide: LOCALE_ID, useValue: "de" },
-        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        { provide: DeviceDetectorService, useClass: UniversalDeviceDetectorService },
+        {provide: LOCALE_ID, useValue: "de"},
+        {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+        {provide: DeviceDetectorService, useClass: UniversalDeviceDetectorService},
         {
             provide: ErrorHandler,
             useValue: Sentry.createErrorHandler({
@@ -77,12 +71,13 @@ import { NgxEchartsModule } from 'ngx-echarts';
         },
         {
             provide: APP_INITIALIZER,
-            useFactory: () => () => { },
+            useFactory: () => () => {},
             deps: [Sentry.TraceService],
             multi: true,
         },
     ],
-    exports: [],
+    exports: [
+    ],
     bootstrap: [AppComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

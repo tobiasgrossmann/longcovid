@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit } from "@angular/core";
-import {UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {SQLiteService} from "../../services/sqlite.service";
 import {DetailService} from "../../services/detail.service";
 import {DatabaseCrudService} from "../../services/database-crud.service";
@@ -15,7 +15,7 @@ import {Aktivitaet} from "../../utils/interfaces";
 })
 export class AktivitaetenErfassenPage implements OnInit, AfterViewInit {
 
-  public form: UntypedFormGroup;
+  public form: FormGroup;
   public aktivitaeten: Array<Aktivitaet> = [];
   public aktivitaetenNameListe: string;
   public aktivitaetenCheckboxListeArray: any;
@@ -50,7 +50,7 @@ export class AktivitaetenErfassenPage implements OnInit, AfterViewInit {
   private readonly tagId;
 
   constructor(
-      private fb: UntypedFormBuilder,
+      private fb: FormBuilder,
       private sqliteService: SQLiteService,
       private detailService: DetailService,
       private databaseCrudService: DatabaseCrudService,
@@ -81,7 +81,7 @@ export class AktivitaetenErfassenPage implements OnInit, AfterViewInit {
   }
 
   onLoadCheckboxStatus() {
-    const aktivitaetenCheckboxListe: UntypedFormArray = this.form.get("aktivitaetenCheckboxListe") as UntypedFormArray;
+    const aktivitaetenCheckboxListe: FormArray = this.form.get("aktivitaetenCheckboxListe") as FormArray;
     this.aktivitaetenCheckboxListe.forEach(o => {
       this.updateCheckControl(aktivitaetenCheckboxListe, o);
     });
@@ -92,30 +92,28 @@ export class AktivitaetenErfassenPage implements OnInit, AfterViewInit {
         .then(res => {
           if (res.values) {
 
-            if (res && Array.isArray(res.values) && res.values[0]?.aktivitaetenNames) {
-              this.aktivitaetenNameListe = res.values[0]?.aktivitaetenNames;
+            if (res.values[0].aktivitaetenNames) {
+              this.aktivitaetenNameListe = res.values[0].aktivitaetenNames;
               this.form.patchValue({aktivitaetenListe: this.aktivitaetenNameListe});
             }
 
-            if (res && Array.isArray(res.values) && res.values[0]?.aktivitaetenNamesCheckboxes) {
+            if (res.values[0].aktivitaetenNamesCheckboxes) {
 
-              this.aktivitaetenCheckboxListe[0].number_value = res.values[0]?.sportValue;
-              this.aktivitaetenCheckboxListe[1].number_value = res.values[0]?.arbeitValue;
-              this.aktivitaetenCheckboxListe[2].number_value = res.values[0]?.hausarbeitValue;
-              this.aktivitaetenCheckboxListe[3].number_value = res.values[0]?.entspannungValue;
+              this.aktivitaetenCheckboxListe[0].number_value = res.values[0].sportValue;
+              this.aktivitaetenCheckboxListe[1].number_value = res.values[0].arbeitValue;
+              this.aktivitaetenCheckboxListe[2].number_value = res.values[0].hausarbeitValue;
+              this.aktivitaetenCheckboxListe[3].number_value = res.values[0].entspannungValue;
 
-              //patch values from database to form
               //patch values from database to form
               this.form.patchValue({
-                sportValue: res.values[0]?.sportValue,
-                arbeitValue: res.values[0]?.arbeitValue,
-                hausarbeitValue: res.values[0]?.hausarbeitValue,
-                entspannungValue: res.values[0]?.entspannungValue,
+                sportValue: res.values[0].sportValue,
+                arbeitValue: res.values[0].arbeitValue,
+                hausarbeitValue: res.values[0].hausarbeitValue,
+                entspannungValue: res.values[0].entspannungValue,
               });
 
               //split string data from database into array
-              this.aktivitaetenCheckboxListeArray = res.values[0]?.aktivitaetenNamesCheckboxes.split(",");
-
+              this.aktivitaetenCheckboxListeArray = res.values[0].aktivitaetenNamesCheckboxes.split(",");
               //loop through array
               this.aktivitaetenCheckboxListeArray.forEach((item: string) => {
                 //if array item can be identified as possible activity then go on
@@ -129,11 +127,10 @@ export class AktivitaetenErfassenPage implements OnInit, AfterViewInit {
             }
 
           }
-
           return this.aktivitaetenNameListe;
         })
         .catch(error => {
-          console.error("loadAktivitaeten error", JSON.stringify(error));
+          console.log(error);
           this.toastService.showErrorToast(this.translateService.instant("aktivitaet-erfassen-page.error"));
         });
 
@@ -151,36 +148,36 @@ export class AktivitaetenErfassenPage implements OnInit, AfterViewInit {
     )
         .then(res => {
           if (res.values) {
-            this.aktivitaetenNameListe = res.values[0]?.aktivitaetenNames;
-            this.aktivitaetenCheckboxListe = res.values[0]?.aktivitaetenNamesCheckboxes;
+            this.aktivitaetenNameListe = res.values[0].aktivitaetenNames;
+            this.aktivitaetenCheckboxListe = res.values[0].aktivitaetenNamesCheckboxes;
             this.form.patchValue({
               aktivitaetenListe: this.aktivitaetenNameListe,
-              sportValue: res.values[0]?.sportValue,
-              arbeitValue: res.values[0]?.arbeitValue,
-              hausarbeitValue: res.values[0]?.hausarbeitValue,
-              entspannungValue: res.values[0]?.entspannungValue,
+              sportValue: res.values[0].sportValue,
+              arbeitValue: res.values[0].arbeitValue,
+              hausarbeitValue: res.values[0].hausarbeitValue,
+              entspannungValue: res.values[0].entspannungValue,
             });
           }
           this.toastService.showSuccessToast(this.translateService.instant("aktivitaet-erfassen-page.success"));
           return this.aktivitaetenNameListe;
         })
         .catch(error => {
-          console.error("updateAktivitaeten error", JSON.stringify(error));
+          console.log(error);
           this.toastService.showErrorToast(this.translateService.instant("aktivitaet-erfassen-page.error"));
         });
   }
 
   onSelectionChange(event: any, item: any) {
-    const aktivitaetenCheckboxListe: UntypedFormArray = this.form.get("aktivitaetenCheckboxListe") as UntypedFormArray;
+    const aktivitaetenCheckboxListe: FormArray = this.form.get("aktivitaetenCheckboxListe") as FormArray;
     this.aktivitaetenCheckboxListe[item].checked = event.target.checked;
     this.updateCheckControl(aktivitaetenCheckboxListe, event.target);
   }
 
   updateCheckControl(cal, object) {
     if (object.checked) {
-      cal.push(new UntypedFormControl(object.value));
+      cal.push(new FormControl(object.value));
     } else {
-      cal.controls.forEach((item: UntypedFormControl, index) => {
+      cal.controls.forEach((item: FormControl, index) => {
         if (item.value === object.value) {
           cal.removeAt(index);
           return;

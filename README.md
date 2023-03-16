@@ -1,12 +1,20 @@
 # Introduction 
-IONIC App to support LongCovid Patients. The App will shall be free of charge and shall not leverage of data. We would be happy for any contributors. 
-https://www.long-covid-app.com/
+TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+
+# Getting Started
+TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
+1.	Installation process
+2.	Software dependencies
+3.	Latest releases
+4.	API references
+
+# Build and Test
+TODO: Describe and show how to build your code and run the tests. 
 
 # Contribute
-We will check any pull requests, and if there are no security flaws, we will create a new Appstore release.
+TODO: Explain how other users and developers can contribute to make your code better. 
 
-
-ionic build
-npx cap sync 
-npx cap run android --target Pixel_3_API_31_2
-![image](https://user-images.githubusercontent.com/16018524/225567409-56e8d0ec-dbe1-40a3-8f9b-eda6ad5bffc5.png)
+If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
+- [ASP.NET Core](https://github.com/aspnet/Home)
+- [Visual Studio Code](https://github.com/Microsoft/vscode)
+- [Chakra Core](https://github.com/Microsoft/ChakraCore)

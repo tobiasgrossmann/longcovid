@@ -39,7 +39,7 @@ export class AppComponent {
             this.detail.setExportJson(false);
             this.sqlite.initializePlugin().then(ret => {
                 this.initPlugin = ret;
-                console.log("[sqlite.initializePlugin] " + this.initPlugin);
+                console.log(">>>> in App  this.initPlugin " + this.initPlugin);
             });
         });
     }

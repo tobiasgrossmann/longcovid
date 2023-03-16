@@ -1,4 +1,6 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from "@angular/core";
+import {SQLiteService} from "../../services/sqlite.service";
+import {DetailService} from "../../services/detail.service";
 import {DatabaseCrudService} from "../../services/database-crud.service";
 import {Dialog} from "@capacitor/dialog";
 import {Aktivitaet, Essen, Symptom, Tag, Tagesform, TimelineData} from "../../utils/interfaces";
@@ -11,16 +13,16 @@ import {Papa} from "ngx-papaparse";
 import {AlertController} from "@ionic/angular";
 import {DateOnlyPipe} from "../../utils/util-filters/date-only.pipe";
 import {DeviceDetectorService} from "ngx-device-detector";
+import {TagesformPipe} from "../../utils/util-filters/tagesform-pipe.pipe";
+import {ErschoepfungsartPipe} from "../../utils/util-filters/erschoepfungsart-pipe.pipe";
+import {SymptomePipe} from "../../utils/util-filters/symptome.pipe";
 import {CommaBlankSeparatorPipe} from "../../utils/util-filters/comma-blank-separator.pipe";
 import packageJson from "../../../../package.json";
+import {delay} from "rxjs/operators";
 import { App } from "@capacitor/app";
 import { PluginListenerHandle } from "@capacitor/core";
-import { BackgroundTask } from "@capawesome/capacitor-background-task";
+import { BackgroundTask } from "@robingenz/capacitor-background-task";
 import { NavigationEnd, Router } from "@angular/router";
-import { NotiService } from "src/app/services/noti.service";
-import { BackupService } from "src/app/services/backup.service";
-import { delay } from "rxjs/operators";
-
 @Component({
     selector: "app-tagebuch-timeline",
     templateUrl: "./tagebuch-timeline.page.html",
@@ -44,10 +46,15 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
     public version: string = packageJson.version;
     private appStateChangeListener: PluginListenerHandle | undefined;
     private routerSubscription: any;
+    public jsonResponse;
+    public wantedBackupsNumber: number = this.databaseCrudService.getWantedBackupsNumber();
 
 
     constructor(
                 private router: Router,
+                //load database services
+                private sqliteService: SQLiteService,
+                private detailService: DetailService,
                 private databaseCrudService: DatabaseCrudService,
                 //load feedback services
                 private toastService: ToastServiceService,
@@ -58,15 +65,17 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
                 private translateService: TranslateService,
                 //load device detection service
                 private deviceService: DeviceDetectorService,
-                private backupService: BackupService,
                 //load pipes
                 private dateOnlyPipe: DateOnlyPipe,
-                private commaBlankSeparatorPipe: CommaBlankSeparatorPipe,
-                private notiService: NotiService,
+                private tagesformPipe: TagesformPipe,
+                private erschoepfungsartPipe: ErschoepfungsartPipe,
+                private symptomePipe: SymptomePipe,
+                private commaBlankSeparatorPipe: CommaBlankSeparatorPipe
     ) {
         this.clearTimelineTable();
         this.deviceInfo = this.deviceService.getDeviceInfo();
     }
+
 
   //----- ngOnInit - OLNY USED FOR AUTOMATIC BACKUP CREATION WHEN BEFORE CLOSING THE APP ----- //
 
@@ -77,7 +86,6 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
           this.updateTimelineData();
         }
       }});
-    
 
       App.addListener("appStateChange", async ({ isActive }) => {
         if (isActive) {
@@ -87,17 +95,12 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
         // Start the background task by calling `beforeExit`.
         const taskId = await BackgroundTask.beforeExit(async () => {
           // Run your code...
-          await this.backupService.checkIfBackupsFolderExistsAndCreateBackup();
-          await this.backupService.deleteOldBackupsIfMoreThanWanted();
+          await this.checkIfBackupsFolderExistsAndCreateBackup();
+          await this.deleteOldBackupsIfMoreThanWanted();
           // Finish the background task as soon as everything is done.
           BackgroundTask.finish({ taskId });
         });
       });
-
-    }
-
-    public ionViewDidEnter(){
-      this.notiService.restartNotifications();
     }
 
     public ngOnDestroy() {
@@ -106,7 +109,106 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
       this.appStateChangeListener?.remove();
     }
 
- 
+    async checkIfBackupsFolderExistsAndCreateBackup() {
+      const backupFolderExists = await this.checkIfBackupDirectoryExistsAndReturnBoolean();
+
+      if (backupFolderExists === true) {
+        this.onBackupClick();
+      } else {
+        await this.createBackupDirectory();
+        this.onBackupClick();
+      }
+    }
+
+    async checkIfBackupDirectoryExistsAndReturnBoolean(): Promise<boolean> {
+      try {
+        const directoryExists: any = await Filesystem.readdir({directory: Directory.External, path: "backups"});
+        console.log(directoryExists);
+        return !!directoryExists;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    async createBackupDirectory() {
+      await Filesystem.mkdir({
+        directory: Directory.External,
+        path: "backups",
+      }).then(response => {
+        console.log(response);
+      });
+    }
+
+    onBackupClick() {
+       this.databaseCrudService.getDatabaseExport("full").then(
+        response => {
+          console.log(response);
+          this.jsonResponse = response.export;
+          console.log(this.jsonResponse);
+          this.checkIfBackupDirectoryExists().then(
+            res => {
+              this.createBackupExport("Backup_" + moment().format("DD_MM_YYYY_HH_mm_ss") + ".ts", JSON.stringify(this.jsonResponse));
+
+            }
+          );
+        });
+    }
+
+    async checkIfBackupDirectoryExists() {
+      await Filesystem.readdir({
+        directory: Directory.External,
+        path: "backups",
+      }).then(response => {
+        console.log(response);
+      }).catch(error => {
+        console.log("Error:", error);
+        this.createBackupDirectory().then(res => {
+          this.checkIfBackupDirectoryExists();
+        });
+      });
+    }
+
+    async createBackupExport(name: string, exportData: any) {
+      await Filesystem.writeFile({
+        directory: Directory.External,
+        path: "backups/" + name,
+        data: exportData,
+        encoding: Encoding.UTF16,
+      }).then(response => {
+        console.log(response);
+      }, err => {
+        console.log("Error: ", err);
+        this.toastService.showErrorToast(this.translateService.instant("einstellungen.backup-creation-fail"));
+      });
+    }
+
+  async deleteOldBackupsIfMoreThanWanted() {
+    this.wantedBackupsNumber = this.databaseCrudService.getWantedBackupsNumber();
+    console.log(this.wantedBackupsNumber);
+    await Filesystem.readdir({
+      directory: Directory.External,
+      path: "backups",
+    }).then(response => {
+      console.log(response);
+      console.log(response.files);
+
+      if (response.files.length >= this.wantedBackupsNumber-1) {
+        const backupArray = response.files.sort().reverse();
+        backupArray.forEach((item: any, index: number) => {
+          console.log(item + " " + index);
+          if (index >= this.wantedBackupsNumber-1) {
+            Filesystem.deleteFile({
+              directory: Directory.External,
+              path: "backups/" + item,
+            });
+          }
+        }, error => {
+          console.log("Error: ", error);
+        });
+      }
+    });
+
+  }
 
     //----- START --> AfterViewInit ----- //
 
@@ -144,7 +246,6 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
     private async startupProcess() {
       console.log(">>>> im Tagebuch-Timeline ");
 
-
       const dbExists = await this.databaseCrudService.openDatabaseConnectionAndReturnDatabaseBoolean();
       console.log("setupDone");
 
@@ -155,11 +256,9 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
 
       } else if (dbExists === true) {
         console.log("openDatabase");
-        await this.databaseCrudService.upgradeDatabaseSchema();
-        await this.databaseCrudService.openDatabaseConnectionAndReturnDatabaseBoolean();
         await this.databaseCrudService.openDatabase();
-
-        console.log ("opened db version " + await this.databaseCrudService.getDatabaseVersion());
+        await this.checkDatabaseSchemaAndUpgrade();
+        // await this.loadTimelineData();
 
       } else {
         await delay(5000);
@@ -187,7 +286,31 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
     await alert.present();
   }
 
- 
+    //----- ionViewWillEnter after AfterViewInit ----- //
+
+    async ionViewWillEnter() {
+        // await this.clearTimelineTable();
+        // await this.updateTimelineData();
+        // await this.createNeuerTag();
+    }
+
+  //----- ionViewWillEnter after AfterViewInit ----- //
+
+  //----- FUNCTIONS FOR ionViewWillEnter ----- //
+    //FIXME: is this necessary? why the format of the date is not correct?
+    // createNeuerTag(): any {
+    //     const currentDate = moment().tz("Europe/Berlin", true).format(); // DD-MM-YYYY
+    //     console.log(currentDate);
+    //     this.databaseCrudService.postNeuerTag(currentDate)
+    //         .then(response => {
+    //             console.log(response);
+    //         }
+    //         ).catch(error => {
+    //             if (error) {
+    //                 throw new Error(error.message);
+    //             }
+    //         });
+    // }
 
     async doInfinite(event) {
       if(!this.isAllLoaded){
@@ -222,10 +345,10 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
         await this.loadTagesWithPaging();
       }
       await this.loadFiveDays();
-      await this.loadSymptome();
-      await this.loadEssen();
-      await this.loadTagesform();
-      await this.loadAktivitaet();
+      // await this.loadSymptome();
+      // await this.loadEssen();
+      // await this.loadTagesform();
+      // await this.loadAktivitaet();
       const p2 = performance.now();
       console.log("loadTimelineData took " + (p2 - p1) + " milliseconds.");
       console.log(this.timelineTable);
@@ -235,24 +358,56 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
 
     async loadDetails(DaysIds: number[]) {
       const p1 = performance.now();
-      this.timelineTable.essen = await this.databaseCrudService.essenRepository.findAllInRange(DaysIds);
-      const p2 = performance.now();
-      console.log(`Time to load Essen: ${p2 - p1}`);
-
-      this.timelineTable.aktivitaeten = await this.databaseCrudService.aktivitaetRepository.findAllInRange(DaysIds)
-      const p3 = performance.now();
-      console.log(`Time to load Aktivitaet: ${p3 - p2}`);
-
-      this.timelineTable.symptome = await this.databaseCrudService.symptomRepository.findAllInRange(DaysIds);
-      const p4 = performance.now();
-      console.log(`Time to load Symptome: ${p4 - p3}`);
-
-      this.timelineTable.tagesform = await this.databaseCrudService.tagesformRepository.findAllInRange(DaysIds);
-      const p5 = performance.now();
-      console.log(`Time to load Tagesform: ${p5 - p4}`);
-
-      const p6 = performance.now();
-      console.log("loadFiveDays: " + (p6 - p1) + " ms");
+        await this.databaseCrudService.essenRepository.findAllInRange(DaysIds).then(res => {
+          if (res.values) {
+            this.timelineTable.essen = this.timelineTable.essen.concat(res);
+          }
+          })
+          .catch(error => {
+              if (error) {
+                  console.log(error);
+              }
+          });
+        const p2 = performance.now();
+        console.log(`Time to load Essen: ${p2 - p1}`);
+        await this.databaseCrudService.aktivitaetRepository.findAllInRange(DaysIds).then(res => {
+          if (res.values) {
+            this.timelineTable.aktivitaeten = this.timelineTable.aktivitaeten.concat(res);
+          }
+          })
+          .catch(error => {
+              if (error) {
+                  console.log(error);
+              }
+          });
+        const p3 = performance.now();
+        console.log(`Time to load Aktivitaet: ${p3 - p2}`);
+        await this.databaseCrudService.symptomRepository.findAllInRange(DaysIds).then(res => {
+          if (res.values) {
+            this.timelineTable.symptome = this.timelineTable.symptome.concat(res);
+          }
+          })
+          .catch(error => {
+              if (error) {
+                  console.log(error);
+              }
+          });
+        const p4 = performance.now();
+        console.log(`Time to load Symptome: ${p4 - p3}`);
+        await this.databaseCrudService.tagesformRepository.findAllInRange(DaysIds).then(res => {
+          if (res.values) {
+            this.timelineTable.tagesform = this.timelineTable.tagesform.concat(res);
+          }
+          })
+          .catch(error => {
+              if (error) {
+                  console.log(error);
+              }
+          });
+        const p5 = performance.now();
+        console.log(`Time to load Tagesform: ${p5 - p4}`);
+        const p6 = performance.now();
+        console.log("loadFiveDays: " + (p6 - p1) + " ms");
     }
 
     async loadFiveDays(): Promise<any> {
@@ -319,7 +474,7 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
           })
           .catch(error => {
               if (error) {
-                  console.error(error);
+                  console.log(error);
                   // this.toastService.showErrorToast("Fehler: Symptome laden fehlgeschlagen!");
               }
           });
@@ -372,7 +527,9 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
 
     //----- DELETE DATABASE AND RESTART ----- //
 
-    async resetDatabase() {
+    async deleteDatabase() {
+        await this.databaseCrudService.deleteDatabaseByName();
+        await this.databaseCrudService.createDatabaseFromJSON();
         await this.clearTimelineTable();
         const currentDate = new Date().toISOString().split("T")[0]; // with format: YYYY-MM-DD
         await this.createNeuerTagNachWunsch(currentDate);
@@ -380,7 +537,7 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
     }
 
     public async startTimeline() {
-        await this.resetDatabase();
+        await this.deleteDatabase();
         await this.toastService.showSuccessToast(this.translateService.instant("tagebuch-timeline.app-gestartet"));
     }
 
@@ -411,7 +568,18 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
       await alert.present();
     }
 
-  
+    //----- CHECK DATABASE SCHEMA ----- //
+
+    public async checkDatabaseSchemaAndUpgrade() {
+      const result = await this.databaseCrudService.compareCurrentDatabaseExportedJSONWithSchemaJSON();
+      if (result === false) {
+        console.log(">>>> creating Backup before Upgrading Database Schema");
+        await this.checkIfBackupsFolderExistsAndCreateBackup();
+        console.log(">>>> starting upgradeDatabaseSchema");
+        await this.databaseCrudService.upgradeDatabaseSchema();
+      }
+    }
+
 
     //----- CREATE NEW DAY ----- //
 
@@ -435,11 +603,11 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
                 }, {
                     text: this.translateService.instant("tagebuch-timeline.tag-erstellen"),
                     cssClass: "ion-alert-primary",
-                    handler: async (response) => {
-                        console.log("presentCreateDayAlert", response.date);
+                    handler: (response) => {
+                        console.log(response.date);
                         if(response.date){
                           const constructedDate = response.date + "T00:00:00+01:00";
-                          await this.createNeuerTagNachWunsch(constructedDate);
+                          this.createNeuerTagNachWunsch(constructedDate);
                           const currentDate = moment().tz("Europe/Berlin", true).format(); // DD-MM-YYYY
                           console.log(currentDate);
                       }else{
@@ -456,23 +624,23 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
       this.timelineTable.tage.push(res.values[0]);
       this.timelineTable.tage.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       const essen: Essen = {
-        id: res.values[0]?.id,
-        tageid: res.values[0]?.id,
+        id: res.values[0].id,
+        tageid: res.values[0].id,
         lastModified: null,
       };
       const tagesform: Tagesform = {
-        id: res.values[0]?.id,
-        tageid: res.values[0]?.id,
+        id: res.values[0].id,
+        tageid: res.values[0].id,
         lastModified: null,
       };
       const aktivitaeten: Aktivitaet = {
-        id: res.values[0]?.id,
-        tageid: res.values[0]?.id,
+        id: res.values[0].id,
+        tageid: res.values[0].id,
         lastModified: null,
       };
       const symptom: Symptom = {
-        id: res.values[0]?.id,
-        tageid: res.values[0]?.id,
+        id: res.values[0].id,
+        tageid: res.values[0].id,
         lastModified: null,
       };
 
@@ -497,11 +665,11 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
         //setup database
         try {
             await this.databaseCrudService.postNeuerTagAnyDay(newDate)
-                .then(() => {
+                .then(res => {
                   // this.addingDayWithoutRefresh(res); //TODO: improve this
                   this.clearTimelineTable();
                   this.updateTimelineData();
-                  
+
                 })
                 .catch(error => {
                     if (error) {
@@ -571,6 +739,30 @@ export class TagebuchTimelinePage implements AfterViewInit, OnInit, OnDestroy  {
 
     }
 
+    //----- DELETE DATABASE AND RESTART ----- //
+
+    public async presentDeleteAlert() {
+        const alert = await this.alertController.create({
+            header: this.translateService.instant("tagebuch-timeline.delete-alert-title"),
+            message: this.translateService.instant("tagebuch-timeline.delete-alert-message"),
+            buttons: [
+                {
+                    text: this.translateService.instant("tagebuch-timeline.back"),
+                    role: "cancel",
+                    cssClass: "ion-alert-grey",
+                    handler: () => {
+                    }
+                }, {
+                    text: this.translateService.instant("tagebuch-timeline.delete-alert-do-delete"),
+                    cssClass: "ion-alert-red",
+                    handler: () => {
+                        this.deleteDatabase();
+                    }
+                }
+            ]
+        });
+        await alert.present();
+    }
 
     //----- FUNCTIONS FOR EXPORT OF DATA ----- //
 

@@ -1,46 +1,70 @@
 PODS:
-  - Capacitor (4.7.0):
+  - AppCenter/Analytics (4.3.0):
+    - AppCenter/Core
+  - AppCenter/Core (4.3.0)
+  - AppCenter/Crashes (4.3.0):
+    - AppCenter/Core
+  - AppCenterCapacitorShared (1.0.0):
+    - AppCenter/Core (= 4.3.0)
+  - Capacitor (3.4.3):
     - CapacitorCordova
-  - CapacitorApp (4.1.1):
+  - CapacitorApp (1.1.1):
     - Capacitor
-  - CapacitorCommunitySqlite (4.6.3-4):
+  - CapacitorCommunityAppcenterAnalytics (1.0.0):
+    - AppCenter/Analytics (= 4.3.0)
+    - AppCenterCapacitorShared (~> 1.0.0)
+    - Capacitor
+  - CapacitorCommunityAppcenterCrashes (1.0.1):
+    - AppCenter/Crashes (= 4.3.0)
+    - AppCenterCapacitorShared (~> 1.0.0)
+    - Capacitor
+  - CapacitorCommunitySqlite (3.4.1):
     - Capacitor
     - SQLCipher
     - ZIPFoundation
-  - CapacitorCordova (4.7.0)
-  - CapacitorDialog (4.0.1):
+  - CapacitorCordova (3.4.3)
+  - CapacitorDialog (1.0.7):
     - Capacitor
-  - CapacitorFilesystem (4.1.4):
+  - CapacitorFilesystem (1.1.0):
     - Capacitor
-  - CapacitorLocalNotifications (4.1.5):
+  - CapacitorShare (1.1.2):
     - Capacitor
-  - CapacitorShare (4.0.1):
-    - Capacitor
-  - CapawesomeCapacitorBackgroundTask (2.0.0):
-    - Capacitor
-  - CordovaPlugins (4.0.1):
+  - CordovaPlugins (3.4.3):
     - CapacitorCordova
-  - SQLCipher (4.5.3):
-    - SQLCipher/standard (= 4.5.3)
-  - SQLCipher/common (4.5.3)
-  - SQLCipher/standard (4.5.3):
+  - RobingenzCapacitorBackgroundTask (1.0.1):
+    - Capacitor
+  - Sentry (7.1.4):
+    - Sentry/Core (= 7.1.4)
+  - Sentry/Core (7.1.4)
+  - SentryCapacitor (0.4.4):
+    - Capacitor
+    - Sentry (~> 7.1.3)
+  - SQLCipher (4.5.1):
+    - SQLCipher/standard (= 4.5.1)
+  - SQLCipher/common (4.5.1)
+  - SQLCipher/standard (4.5.1):
     - SQLCipher/common
-  - ZIPFoundation (0.9.16)
+  - ZIPFoundation (0.9.13)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
+  - "CapacitorCommunityAppcenterAnalytics (from `../../node_modules/@capacitor-community/appcenter-analytics`)"
+  - "CapacitorCommunityAppcenterCrashes (from `../../node_modules/@capacitor-community/appcenter-crashes`)"
   - "CapacitorCommunitySqlite (from `../../node_modules/@capacitor-community/sqlite`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
-  - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
   - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
-  - "CapawesomeCapacitorBackgroundTask (from `../../node_modules/@capawesome/capacitor-background-task`)"
   - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
+  - "RobingenzCapacitorBackgroundTask (from `../../node_modules/@robingenz/capacitor-background-task`)"
+  - "SentryCapacitor (from `../../node_modules/@sentry/capacitor`)"
 
 SPEC REPOS:
   trunk:
+    - AppCenter
+    - AppCenterCapacitorShared
+    - Sentry
     - SQLCipher
     - ZIPFoundation
 
@@ -49,6 +73,10 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorApp:
     :path: "../../node_modules/@capacitor/app"
+  CapacitorCommunityAppcenterAnalytics:
+    :path: "../../node_modules/@capacitor-community/appcenter-analytics"
+  CapacitorCommunityAppcenterCrashes:
+    :path: "../../node_modules/@capacitor-community/appcenter-crashes"
   CapacitorCommunitySqlite:
     :path: "../../node_modules/@capacitor-community/sqlite"
   CapacitorCordova:
@@ -57,29 +85,34 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/dialog"
   CapacitorFilesystem:
     :path: "../../node_modules/@capacitor/filesystem"
-  CapacitorLocalNotifications:
-    :path: "../../node_modules/@capacitor/local-notifications"
   CapacitorShare:
     :path: "../../node_modules/@capacitor/share"
-  CapawesomeCapacitorBackgroundTask:
-    :path: "../../node_modules/@capawesome/capacitor-background-task"
   CordovaPlugins:
     :path: "../capacitor-cordova-ios-plugins"
+  RobingenzCapacitorBackgroundTask:
+    :path: "../../node_modules/@robingenz/capacitor-background-task"
+  SentryCapacitor:
+    :path: "../../node_modules/@sentry/capacitor"
 
 SPEC CHECKSUMS:
-  Capacitor: 146dc340ebdf751fa1b999919e4423494c243d29
-  CapacitorApp: acd42fe8561fe751ad5b5f459aa85e6acd7bee24
-  CapacitorCommunitySqlite: 4b82784a3437c19d3cda5ff07a46774a1cb36af8
-  CapacitorCordova: b9c6fdd02470c85e39baf9ae638260477a7f46f3
-  CapacitorDialog: e979738675fcd964bfab54c705ff77abb985f5c9
-  CapacitorFilesystem: 3d665e5b3719d9f6e240480a7468861b0bb35f93
-  CapacitorLocalNotifications: 50bc296e9304af2b524053bbec9892e80c28415c
-  CapacitorShare: d5da7b440281d2eaef9c4af7e913548fb060a7bc
-  CapawesomeCapacitorBackgroundTask: 976a5232fcef545e7253ce25b71037f283475edf
-  CordovaPlugins: d78c15521f9b8d9c9712eac79487a84ed35c53fd
-  SQLCipher: 57fa9f863fa4a3ed9dd3c90ace52315db8c0fdca
-  ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
+  AppCenter: 883369ab78427b0561c688158d689dfe1f993ea9
+  AppCenterCapacitorShared: 64a70a9174e71ef5acf56bd7d2db0956663282f2
+  Capacitor: a8d7fa9fb3b50adc610247bb8d0310e83424f746
+  CapacitorApp: 6539a37b671391147dd0180e1483c051077254bf
+  CapacitorCommunityAppcenterAnalytics: 8c8e9e036c55947ca6b7fcf9cf0aab665abea9d2
+  CapacitorCommunityAppcenterCrashes: fb523fee26294688fd0678814bffc40b60366aa3
+  CapacitorCommunitySqlite: c252ab2c224d46148b847f340793ea092cbc9c91
+  CapacitorCordova: 687b7d3ef4872c03aa2a2eb052d23008be9ad76b
+  CapacitorDialog: 8bc7116e58d30b126c4d033c06f78a14e554d089
+  CapacitorFilesystem: 47738a7110f2eb8629054217d8d6027d9ffd4e5b
+  CapacitorShare: f1a8ffd3bba7d6113f53fb65aa47d61764c4640a
+  CordovaPlugins: 81e048e5167bac09b25ea0bdbd00ce3b316a126d
+  RobingenzCapacitorBackgroundTask: 4da3dd76050b5d94acda39ca74a1e35cb0f9e0db
+  Sentry: 1d3eb1a25f8c5333c88dd5603904a6d461cd9fcf
+  SentryCapacitor: 370555d2d25b6d089ce6cb944200c46bbf092884
+  SQLCipher: 712e8416685e8e575b9b0706ffee71678b2fdcf8
+  ZIPFoundation: ae5b4b813d216d3bf0a148773267fff14bd51d37
 
-PODFILE CHECKSUM: 7096b1cf0f851ed986f88013deece464b080d6e9
+PODFILE CHECKSUM: bf4e45354d3b8048351aec4d7e03315d0c181906
 
 COCOAPODS: 1.11.3
