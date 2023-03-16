@@ -1,3 +1,0 @@
-npm ci
-ng build (creates the www directory)
-npx cap open ios

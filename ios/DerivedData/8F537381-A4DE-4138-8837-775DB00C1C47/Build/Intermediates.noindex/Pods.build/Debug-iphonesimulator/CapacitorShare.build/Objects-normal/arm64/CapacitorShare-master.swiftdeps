@@ -1,6 +1,0 @@
-version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
-options: "ef2ba03322a3373b09bc6ee1ecb5c2481b7748931b764290a04f7e6985f5b0c1"
-build_start_time: [1678797816, 164631843]
-build_end_time: [1678797819, 612061023]
-inputs:
-  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/node_modules/@capacitor/share/ios/Plugin/SharePlugin.swift": [1678795693, 307410240]

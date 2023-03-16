@@ -1,9 +1,0 @@
-version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
-options: "7146bd7c6a65e52fae45a8e3d0615231b8aa5a4e5cc6a813ab602630b1beeab5"
-build_start_time: [1678797815, 357771873]
-build_end_time: [1678797819, 607949018]
-inputs:
-  ? "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/node_modules/@capawesome/capacitor-background-task/ios/Plugin/BackgroundTask.swift"
-  : [1678795693, 425072669]
-  ? "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/node_modules/@capawesome/capacitor-background-task/ios/Plugin/BackgroundTaskPlugin.swift"
-  : [1678795693, 434055328]

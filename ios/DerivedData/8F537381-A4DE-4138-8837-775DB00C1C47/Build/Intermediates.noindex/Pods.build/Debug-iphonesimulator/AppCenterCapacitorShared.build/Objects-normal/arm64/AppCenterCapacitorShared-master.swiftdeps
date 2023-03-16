@@ -1,7 +1,0 @@
-version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
-options: "14cfa8f4227f1589df68e017ca84cafa088d432469b3dee5898a013609675965"
-build_start_time: [1678797818, 259522914]
-build_end_time: [1678797818, 936486959]
-inputs:
-  ? "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/ios/App/Pods/AppCenterCapacitorShared/AppCenterCapacitorShared/ios/AppCenterCapacitorShared/AppCenterCapacitorShared.swift"
-  : [1678797737, 394556999]

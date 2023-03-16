@@ -1,0 +1,341 @@
+trigger:
+- master
+
+variables:
+  projectName: 'longcovidapp'
+
+stages:
+  - stage: Build
+    jobs:
+          - job: BuildPackagesAndroid
+            pool:
+             vmImage: windows-2019
+            steps:
+              - script:  |
+                  npm install -g @ionic/cli
+                displayName: 'Install Ionic CLI'
+              - script:  |
+                  npm install -g @angular/cli
+                displayName: 'Install angular CLI'
+              - task: JavaToolInstaller@0
+                inputs:
+                  versionSpec: '11'
+                  jdkArchitectureOption: 'x64'
+                  jdkSourceOption: 'PreInstalled'
+
+              # - task: Cache@2
+              #   displayName: Cache
+              #   inputs:
+              #     key: npm | $(Agent.OS) | longcovidapp | package-lock.json
+              #     path: node_modules
+              #     cacheHitVar: 'CacheRestored'
+              # - task: Npm@1
+              #   condition: ne(variables['CacheRestored'], 'true')
+              #   inputs:
+              #     workingDir: '$(Build.SourcesDirectory)/'
+              #     command: install
+              #   displayName: 'npm install'
+
+              - powershell:  |
+                  npm install --force
+                  npm install @capacitor/core @capacitor/cli
+                  ionic build
+                  ionic capacitor add android
+                  npx cap sync
+                  cd android
+                  ./gradlew assembleDebug
+                workingDirectory: $(Build.SourcesDirectory)/
+                displayName: 'gradlew assembleDebug'
+              - task: CopyFiles@2
+                inputs:
+                  SourceFolder: '$(Build.SourcesDirectory)/android/app/build/outputs/apk/debug'
+                  contents: "**/app-debug.apk"
+                  targetFolder: "$(Build.ArtifactStagingDirectory)"
+                displayName: "Copy unsigned Debug APK to staging directory"
+
+              - powershell:  |
+                  cd android
+                  ./gradlew assembleRelease
+                workingDirectory: $(Build.SourcesDirectory)/
+                displayName: 'gradlew assembleRelease'
+
+              - powershell:  |
+                  cd android
+                  ./gradlew buildRelease
+                workingDirectory: $(Build.SourcesDirectory)/
+                displayName: 'gradlew buildRelease'
+
+              - powershell:  |
+                  cd android
+                  ./gradlew bundleRelease
+                workingDirectory: $(Build.SourcesDirectory)/
+                displayName: 'gradlew bundleRelease'
+
+              - task: CopyFiles@2
+                inputs:
+                  SourceFolder: '$(Build.SourcesDirectory)/android/app/build/outputs/apk/release'
+                  contents: "**/app-release-unsigned.apk"
+                  targetFolder: "$(Build.ArtifactStagingDirectory)"
+                displayName: "Copy unsigned Release APK to staging directory"
+
+              - task: CopyFiles@2
+                inputs:
+                  SourceFolder: '$(Build.SourcesDirectory)/android/app/build/outputs/bundle/release'
+                  contents: "**/app-release-unsigned.aab"
+                  targetFolder: "$(Build.ArtifactStagingDirectory)"
+                displayName: "Copy APP to staging directory"
+
+              - task: DownloadSecureFile@1
+                name: longcovidtagebuch_keystore # The name with which to reference the secure file's path on the agent, like $(mySecureFile.secureFilePath)
+                inputs:
+                  secureFile: longcovidtagebuch.keystore
+
+              - task: AndroidSigning@3
+                inputs:
+                  apkFiles: '$(Build.SourcesDirectory)/android/app/build/outputs/apk/release/*.apk'
+                  apksign: true
+                  apksignerKeystoreFile: 'longcovidtagebuch.keystore'
+                  apksignerKeystorePassword: '$(password_keystore)'
+                  apksignerKeystoreAlias: 'patientstrengthsignaturekey'
+                  apksignerArguments: --out $(Build.ArtifactStagingDirectory)/app-release-signed.apk --verbose
+                  zipalign: true
+                displayName: 'Sign the APK'
+
+              - task: AndroidSigning@3
+                inputs:
+                  apkFiles: '$(Build.SourcesDirectory)/android/app/build/outputs/bundle/release/*.aab'
+                  apksign: true
+                  apksignerKeystoreFile: 'longcovidtagebuch.keystore'
+                  apksignerKeystorePassword: '$(password_keystore)'
+                  apksignerKeystoreAlias: 'patientstrengthsignaturekey'
+                  apksignerArguments: --out $(Build.ArtifactStagingDirectory)/app-release-signed.aab --verbose --min-sdk-version 22
+                  zipalign: true
+                displayName: 'Sign the AAB'
+
+              - task: PublishBuildArtifacts@1
+                inputs:
+                  PathtoPublish: "$(Build.ArtifactStagingDirectory)/"
+                  ArtifactName: "android"
+                  publishLocation: "Container"
+                displayName: "Publish artifacts"
+
+
+          - job: BuildPackagesIOS
+            pool:
+             vmImage: macOS-latest
+            steps:
+              - task: DownloadSecureFile@1
+                name: longcovid_patientstrength_ios_p12
+                inputs:
+                  secureFile: longcovid_patientstrength_ios.p12
+              - task: InstallAppleCertificate@2
+                inputs:
+                  certSecureFile: 'longcovid_patientstrength_ios.p12'
+                  certPwd: '$(P12password)'
+                  deleteCert: true
+                  keychain: 'temp'
+
+              - task: DownloadSecureFile@1
+                name: storecomqperiorpatientstrengthios_mobileprovision
+                inputs:
+                  secureFile: storecomqperiorpatientstrengthios.mobileprovision
+              - task: InstallAppleProvisioningProfile@1
+                inputs:
+                    provProfileSecureFile: 'storecomqperiorpatientstrengthios.mobileprovision'
+                    removeProfile: true
+
+              - script:  |
+                  npm install -g @ionic/cli
+                displayName: 'Install Ionic CLI'
+              - script:  |
+                  npm install -g @angular/cli
+                displayName: 'Install angular CLI'
+              - task: JavaToolInstaller@0
+                inputs:
+                  versionSpec: '11'
+                  jdkArchitectureOption: 'x64'
+                  jdkSourceOption: 'PreInstalled'
+
+              # - task: Cache@2
+              #   displayName: Cache
+              #   inputs:
+              #     key: npm | $(Agent.OS) | longcovidapp | package-lock.json
+              #     path: node_modules
+              #     cacheHitVar: 'CacheRestored'
+              # - task: Npm@1
+              #   condition: ne(variables['CacheRestored'], 'true')
+              #   inputs:
+              #     workingDir: '$(Build.SourcesDirectory)/'
+              #     command: install
+              #   displayName: 'npm install'
+
+              - powershell:  |
+                  npm install --force
+                  npm install @capacitor/core @capacitor/cli
+                  ionic build ios
+                  npx cap sync ios
+                workingDirectory: $(Build.SourcesDirectory)/
+                displayName: 'Build Project Debug'
+
+              - task: Xcode@5
+                inputs:
+                  configuration: 'Release'
+                  actions: 'build'
+                  scheme: 'App'
+                  sdk: 'iphoneos'
+                  xcWorkspacePath: 'ios/app/app.xcworkspace'
+                  xcodeVersion: 'default'
+                  packageApp: true
+                  signingOption: 'manual'
+                  destinationTypeOption: 'devices'
+                  signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
+                  provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
+                  exportTeamId: 'D2F9D8PBCT'
+                  teamId: 'D2F9D8PBCT'
+
+              - task: CopyFiles@2
+                inputs:
+                  contents: '**/*.ipa'
+                  targetFolder: '$(build.artifactStagingDirectory)'
+                  flattenFolders: true
+              - task: CopyFiles@2
+                inputs:
+                  contents: '**/*.xcarchive'
+                  targetFolder: '$(build.artifactStagingDirectory)'
+                  flattenFolders: true
+              - task: PublishBuildArtifacts@1
+                inputs:
+                  PathtoPublish: "$(Build.ArtifactStagingDirectory)/"
+                  ArtifactName: "ios"
+                  publishLocation: "Container"
+                displayName: "Publish artifacts"
+
+          - job: BuildPackagesIOSAdHoc
+            pool:
+             vmImage: macOS-latest
+            steps:
+              - task: DownloadSecureFile@1
+                name: longcovid_patientstrength_ios_p12
+                inputs:
+                  secureFile: longcovid_patientstrength_ios.p12
+              - task: InstallAppleCertificate@2
+                inputs:
+                  certSecureFile: 'longcovid_patientstrength_ios.p12'
+                  certPwd: '$(P12password)'
+                  deleteCert: true
+                  keychain: 'temp'
+
+              - task: DownloadSecureFile@1
+                name: adhoccomqperiorpatientstrengthios_mobileprovision
+                inputs:
+                  secureFile: adhocqperiorpatientstrengthios.mobileprovision
+              - task: InstallAppleProvisioningProfile@1
+                inputs:
+                    provProfileSecureFile: 'adhocqperiorpatientstrengthios.mobileprovision'
+                    removeProfile: true
+
+              - script:  |
+                  npm install -g @ionic/cli
+                displayName: 'Install Ionic CLI'
+              - script:  |
+                  npm install -g @angular/cli
+                displayName: 'Install angular CLI'
+              - task: JavaToolInstaller@0
+                inputs:
+                  versionSpec: '11'
+                  jdkArchitectureOption: 'x64'
+                  jdkSourceOption: 'PreInstalled'
+
+              # - task: Cache@2
+              #   displayName: Cache
+              #   inputs:
+              #     key: npm | $(Agent.OS) | longcovidapp | package-lock.json
+              #     path: node_modules
+              #     cacheHitVar: 'CacheRestored'
+              # - task: Npm@1
+              #   condition: ne(variables['CacheRestored'], 'true')
+              #   inputs:
+              #     workingDir: '$(Build.SourcesDirectory)/'
+              #     command: install
+              #   displayName: 'npm install'
+
+              - powershell:  |
+                  npm install --force
+                  npm install @capacitor/core @capacitor/cli
+                  ionic build ios
+                  npx cap sync ios
+                workingDirectory: $(Build.SourcesDirectory)/
+                displayName: 'Build Project Debug'
+
+              - task: Xcode@5
+                inputs:
+                  configuration: 'Release'
+                  actions: 'build'
+                  scheme: 'App'
+                  sdk: 'iphoneos'
+                  xcWorkspacePath: 'ios/app/app.xcworkspace'
+                  xcodeVersion: 'default'
+                  packageApp: true
+                  signingOption: 'manual'
+                  destinationTypeOption: 'devices'
+                  signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
+                  provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
+                  exportTeamId: 'D2F9D8PBCT'
+                  teamId: 'D2F9D8PBCT'
+
+              - task: CopyFiles@2
+                inputs:
+                  contents: '**/*.ipa'
+                  targetFolder: '$(build.artifactStagingDirectory)/adhoc/'
+                  flattenFolders: true
+              - task: CopyFiles@2
+                inputs:
+                  contents: '**/*.xcarchive'
+                  targetFolder: '$(build.artifactStagingDirectory)/adhoc/'
+                  flattenFolders: true
+              - task: PublishBuildArtifacts@1
+                inputs:
+                  PathtoPublish: "$(Build.ArtifactStagingDirectory)/"
+                  ArtifactName: "ios"
+                  publishLocation: "Container"
+                displayName: "Publish artifacts"
+
+               
+  - stage: deployment
+    dependsOn:
+          - Build
+    jobs:
+    - job: deployment
+      timeoutInMinutes: 60
+      pool:
+          vmImage: 'windows-2019'
+      steps:
+      - checkout: none
+      - task: DownloadPipelineArtifact@2
+        continueOnError: true
+        inputs:
+          artifact: ios
+          path: '$(System.DefaultWorkingDirectory)/ios'
+      - task: DownloadPipelineArtifact@2
+        continueOnError: true
+        inputs:
+          artifact: android
+          path: '$(System.DefaultWorkingDirectory)/android'
+
+      - task: AppCenterDistribute@3
+        displayName: 'Android Distribute'
+        inputs:
+          serverEndpoint: 'LongCovidAppAndroid'
+          appSlug: 'PatientStrength/DebugAndroidLongCovidTagebuch'
+          appFile: '$(System.DefaultWorkingDirectory)/android/app-debug.apk'
+          releaseNotesInput: "debug version"
+          distributionGroupId: '08c67890-ea50-4bf6-8252-fafb554cef22'
+
+      - task: AppCenterDistribute@3
+        displayName: 'iOS Distribute'
+        inputs:
+          serverEndpoint: 'LongCovidAppIos'
+          appSlug: 'PatientStrength/DebugIOSLongCovidTagebuch'
+          appFile: '$(System.DefaultWorkingDirectory)/ios/app.ipa'
+          releaseNotesInput: "debug version"
+          distributionGroupId: '067500b7-fe25-49d0-a3ef-2f426e79af07'

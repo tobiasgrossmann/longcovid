@@ -1,6 +1,0 @@
-version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
-options: "c0d421f6441c92b227927608cc47acc4f026b388b33dfef3dfe5a12b2ca753a2"
-build_start_time: [1678797816, 584753990]
-build_end_time: [1678797819, 587481975]
-inputs:
-  "/Users/tobi/Q_PERIOR/repo/PS-1240/ps-longcovid/node_modules/@capacitor/dialog/ios/Plugin/DialogPlugin.swift": [1678795693, 346628665]

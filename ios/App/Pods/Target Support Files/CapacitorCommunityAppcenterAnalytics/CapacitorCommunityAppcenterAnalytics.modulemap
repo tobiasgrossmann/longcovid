@@ -1,0 +1,6 @@
+framework module CapacitorCommunityAppcenterAnalytics {
+  umbrella header "CapacitorCommunityAppcenterAnalytics-umbrella.h"
+
+  export *
+  module * { export * }
+}
