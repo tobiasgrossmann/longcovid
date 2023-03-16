@@ -1,0 +1,79 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>{{ 'essen-erfassen' | translate }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="vh-82">
+    <form *ngIf="form" [formGroup]="form">
+
+        <ion-card class="ion-flex-grow-1">
+            <ion-card-header>
+                <ion-img class="vh-25" src="assets/images/Lunch_break_Flatline.svg"></ion-img>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-card-title class="ion-flex-grow-1">{{ 'vormittag' | translate }}</ion-card-title>
+                <ion-textarea
+                        class="w-100 ion-border mb-2"
+                        formControlName="vormittag"
+                        id="vormittagEssen"
+                        placeholder="{{ 'essen-erfassen-page.textarea-placeholder' | translate }}"
+                        required
+                        type="text">
+                </ion-textarea>
+
+                <ion-card-title class="w-100">{{ 'mittag' | translate }}</ion-card-title>
+                <ion-textarea
+                        class="w-100 ion-border mb-2"
+                        formControlName="mittag"
+                        id="mittagEssen"
+                        placeholder="{{ 'essen-erfassen-page.textarea-placeholder' | translate }}"
+                        required
+                        type="text">
+                </ion-textarea>
+
+                <ion-card-title class="w-100">{{ 'abend' | translate }}</ion-card-title>
+                <ion-textarea
+                        class="w-100 ion-border mb-2"
+                        formControlName="abend"
+                        id="abendEssen"
+                        placeholder="{{ 'essen-erfassen-page.textarea-placeholder' | translate }}"
+                        required
+                        type="text">
+                </ion-textarea>
+
+                <ion-card-title class="w-100">{{ 'medikamente' | translate }}</ion-card-title>
+                <ion-textarea
+                        class="w-100 ion-border mb-2"
+                        formControlName="medikamente"
+                        id="medikamente"
+                        placeholder="{{ 'essen-erfassen-page.medikamente-placeholder' | translate }}"
+                        required
+                        type="text">
+                </ion-textarea>
+            </ion-card-content>
+        </ion-card>
+
+    </form>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+    <ion-row>
+        <ion-col>
+            <ion-button (click)="onSubmit()"
+                        *ngIf="form"
+                        class="m-0 p-0 h-3 w-100 opacity-80"
+                        color="primary"
+                        expand="block"
+                        fill="clear"
+                        size="default"
+            >
+                <ion-text
+                        class="small pt-button-text">{{ 'essen-erfassen-page.essen-speichern' | translate }}</ion-text>
+            </ion-button>
+        </ion-col>
+    </ion-row>
+</ion-footer>

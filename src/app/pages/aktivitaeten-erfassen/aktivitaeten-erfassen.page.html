@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'aktivitaet-erfassen' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form *ngIf="form" [formGroup]="form">
+
+    <ion-card class="ion-flex-grow-1">
+      <ion-card-header>
+        <ion-img class="vh-25" src="assets/images/Fitness_Flatline.svg"></ion-img>
+        <ion-card-title class="w-100">{{ 'aktivitaet' | translate }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ng-container *ngFor="let item of aktivitaetenCheckboxListe; let i=index">
+            <ion-item>
+
+              <ion-label class="pt-font-12">{{item.aktivitaet}}</ion-label>
+              <ion-text
+                      class="ion-text-end pt-font-12 pt-bold"
+                      *ngIf="item.checked && (item.value !== this.translateService.instant('aktivitaet-erfassen-page.entspannung'))"
+                      [ngClass]="{ptRed: aktivitaetenCheckboxListe[i].number_value >3, ptGreen: aktivitaetenCheckboxListe[i].number_value <3 }">
+                {{aktivitaetenCheckboxListe[i].number_value | aktivitaeten | translate}}
+              </ion-text>
+              <ion-text
+                      class="ion-text-end pt-font-12 pt-bold"
+                      *ngIf="item.checked && (item.value === this.translateService.instant('aktivitaet-erfassen-page.entspannung'))"
+                      [ngClass]="{ptRed: aktivitaetenCheckboxListe[i].number_value <3, ptGreen: aktivitaetenCheckboxListe[i].number_value >3 }">
+                {{aktivitaetenCheckboxListe[i].number_value | aktivitaeten | translate}}
+              </ion-text>
+
+              <ion-checkbox (ionChange)="onSelectionChange($event,i)" [checked]="item.checked" [value]="item.value"
+                            slot="end">
+              </ion-checkbox>
+            </ion-item>
+
+<!--            <ng-container *ngIf="item.checked && (item.value !== this.translateService.instant('aktivitaet-erfassen-page.entspannung'))">
+            <ion-range min="1" max="5" step="1"
+                         [value]="aktivitaetenCheckboxListe[i].number_value"
+                         (ionChange)="onValueChange($event, i)"
+                         pin ticks snaps
+                         class="pt-range-padding"
+              >
+                <ion-icon slot="start" color="secondary" name="happy"></ion-icon>
+                <ion-icon slot="end" color="danger" name="sad"></ion-icon>
+              </ion-range>
+          </ng-container>-->
+
+            <ng-container *ngIf="item.checked">
+              <ion-range min="1" max="5" step="1"
+                         [value]="aktivitaetenCheckboxListe[i].number_value"
+                         (ionChange)="onValueChange($event, i)"
+                         pin ticks snaps
+                         class="pt-range-padding"
+              >
+                <ion-icon slot="start" color="danger" name="sad"></ion-icon>
+                <ion-icon slot="end" color="secondary" name="happy"></ion-icon>
+              </ion-range>
+            </ng-container>
+
+          </ng-container>
+        </ion-list>
+        <ion-textarea
+                class="w-100 ion-border"
+                formControlName="aktivitaetenListe"
+                id="aktivitaetenListe"
+                placeholder="{{ 'aktivitaet-erfassen-page.textarea-placeholder' | translate }}"
+                required
+                type="text">
+        </ion-textarea>
+      </ion-card-content>
+    </ion-card>
+  </form>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-row>
+    <ion-col>
+      <ion-button (click)="onSubmit()"
+                  *ngIf="form"
+                  class="m-0 p-0 h-3 w-100 opacity-80"
+                  color="primary"
+                  expand="block"
+                  fill="clear"
+                  size="default"
+      >
+        <ion-text
+                class="small pt-button-text">{{ 'aktivitaet-erfassen-page.aktivitaeten-speichern' | translate }}</ion-text>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

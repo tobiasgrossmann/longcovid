@@ -1,0 +1,476 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-img class="ml-2" id="ion-logo" slot="start" src="/assets/images/patient-strength_logo.png"></ion-img>
+        <ion-title *ngIf="deviceInfo.os === 'Android'" slot="start" class="ion-padding-right-0">{{ 'timeline' |
+            translate }}</ion-title>
+        <ion-title *ngIf="deviceInfo.os === 'iOS'  || deviceInfo.os === 'Windows'" slot="start">{{ 'timeline' | translate }}</ion-title>
+
+        <ion-buttons slot="end">
+            <ion-button class="m-0 p-0" expand="block" fill="clear" routerLink="/analyse">
+                <ion-icon class="ion-icon ion-font-20" name="pulse"></ion-icon>
+            </ion-button>
+            <ion-button (click)="shareJSON()" class="m-0 p-0" expand="block" fill="clear">
+                <ion-icon class="ion-icon ion-font-20" name="share-social-outline"></ion-icon>
+            </ion-button>
+            <ion-button class="m-0 p-0" expand="block" fill="clear" (click)="presentDeleteDayAlert()">
+                <ion-icon class="ion-icon ion-font-20" name="trash-bin"></ion-icon>
+            </ion-button>
+            <ion-button class="m-0 p-0" expand="block" fill="clear" (click)="presentCreateDayAlert()">
+                <ion-icon class="ion-icon ion-font-20" name="add-circle-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="timelineTable.tage.length > 0" class="vh-100">
+
+    <ion-grid class="pt-timeline mt-1">
+        <ion-row *ngFor="let tag of timelineTable.tage; let i = index" class="w-100 pt-timelime-item">
+            <ion-col class="w-100" size="2">
+                <ion-row class="pt-timelime-item-row">
+                    <ng-container *ngFor="let symptom of timelineTable.symptome; let a = index">
+                        <ng-container *ngIf="tag.id === symptom.tageid">
+                            <ng-container *ngFor="let essen of timelineTable.essen; let b = index">
+                                <ng-container *ngIf="tag.id === essen.tageid">
+                                    <ng-container *ngIf="a===b">
+                                        <ng-container *ngIf="deviceInfo.os === 'Android'">
+                                            <ion-icon
+                                                *ngIf="!(symptom.symptomNames === (null && 'null' && '') && symptom.symptomNamesCheckboxes === (null && 'null' && '')) &&
+                      !(essen.vormittag === (null && 'null' && '') && essen.mittag === (null && 'null' && '') && essen.abend === (null && 'null' && '')); else helpIcon"
+                                                class="pt-timelime-item-icon pt-timelime-item-icon-checkmark"
+                                                name="checkmark-outline"></ion-icon>
+                                            <ng-template #helpIcon>
+                                                <ion-icon class="pt-timelime-item-icon pt-timelime-item-icon-help"
+                                                    name="help-outline"></ion-icon>
+                                            </ng-template>
+                                        </ng-container>
+                                        <ng-container *ngIf="deviceInfo.os === 'iOS' || deviceInfo.os === 'Windows'">
+                                            <ion-icon
+                                                *ngIf="((symptom.symptomNames !== (undefined || null || 'null' || '')) || symptom.symptomNamesCheckboxes !== (undefined || null || 'null' || '')) &&
+                      (essen.vormittag !== (undefined || null || 'null' || '') || essen.mittag !== (undefined || null || 'null' || '') || essen.abend !== (undefined || null || 'null' || '')); else helpIcon"
+                                                class="pt-timelime-item-icon pt-timelime-item-icon-checkmark"
+                                                name="checkmark-outline"></ion-icon>
+                                            <ng-template #helpIcon>
+                                                <ion-icon class="pt-timelime-item-icon pt-timelime-item-icon-help"
+                                                    name="help-outline"></ion-icon>
+                                            </ng-template>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                </ion-row>
+                <ion-row></ion-row>
+            </ion-col>
+            <ion-col class="w-100 pr-0" size="10">
+                <ion-row>
+                    <ion-title class="pt-date-title">{{tag.date | dateOnly}}</ion-title>
+                </ion-row>
+                <ion-row class="pl-0">
+                    <!-- Symptome Card START -->
+                    <ng-container *ngFor="let symptom of timelineTable.symptome; let a = index">
+                        <ng-container *ngIf="tag.id === symptom.tageid">
+
+                            <ng-container *ngIf="deviceInfo.os === 'Android'">
+                                <ion-card
+                                    *ngIf="symptom.symptomNames === (null && 'null' && '') && symptom.symptomNamesCheckboxes === (null && 'null' && '')"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/symptome-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1 ion-align-items-center">
+                                            <ion-col size="10">
+                                                <ion-text class="pt-bold">{{ 'symptome-erfassen' | translate }}
+                                                </ion-text>
+                                            </ion-col>
+                                            <ion-col class="ion-text-end" size="2">
+                                                <ion-icon class="ion-icon ion-font-25 ion-vertical-align-middle"
+                                                    name="arrow-forward-outline"></ion-icon>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+
+                                <ion-card
+                                    *ngIf="!(symptom.symptomNames === (null && 'null' && '') && symptom.symptomNamesCheckboxes === (null && 'null' && ''))"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/symptome-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1">
+                                            <ion-col>
+                                                <b>{{ 'symptome' | translate }}</b> ({{symptom.lastModified |
+                                                dateTime}})
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row>
+                                            <ion-col>
+                                                {{symptom.symptomNamesCheckboxes | commaBlankSeparator}}<br>
+                                                {{symptom.symptomNames}}
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+                            </ng-container>
+
+                            <ng-container *ngIf="deviceInfo.os === 'iOS' || deviceInfo.os === 'Windows'">
+                                <ion-card
+                                    *ngIf="symptom.symptomNames === (null && 'null' && '') && symptom.symptomNamesCheckboxes === (null && 'null' && '')"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/symptome-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1 ion-align-items-center">
+                                            <ion-col size="10">
+                                                <ion-text class="pt-bold">{{ 'symptome-erfassen' | translate }}
+                                                </ion-text>
+                                            </ion-col>
+                                            <ion-col class="ion-text-end" size="2">
+                                                <ion-icon class="ion-icon ion-font-25 ion-vertical-align-middle"
+                                                    name="arrow-forward-outline"></ion-icon>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+
+                                <ion-card
+                                    *ngIf="!(symptom.symptomNames === (null && 'null' && '') && symptom.symptomNamesCheckboxes === (null && 'null' && ''))"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/symptome-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1">
+                                            <ion-col>
+                                                <b>{{ 'symptome' | translate }}</b> ({{symptom.lastModified |
+                                                dateTime}})
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row>
+                                            <ion-col>
+                                                {{symptom.symptomNamesCheckboxes}}<br>
+                                                {{symptom.symptomNames}}
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+                            </ng-container>
+
+                        </ng-container>
+                    </ng-container>
+                    <!-- Symptome Card ENDE -->
+
+                    <!-- Essen Card START -->
+                    <ng-container *ngFor="let essen of timelineTable.essen; let b = index">
+                        <ng-container *ngIf="tag.id === essen.tageid">
+
+                            <ng-container *ngIf="deviceInfo.os === 'Android'">
+                                <ion-card
+                                    *ngIf="essen.vormittag === (null && 'null' && '') && essen.mittag === (null && 'null' && '') && essen.abend === (null && 'null' && '') && essen.medikamenteValue === (null && 'null' && '')"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/essen-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1 ion-align-items-center">
+                                            <ion-col size="10">
+                                                <ion-text class="pt-bold">{{ 'essen-erfassen' | translate }}</ion-text>
+                                            </ion-col>
+                                            <ion-col class="ion-text-end" size="2">
+                                                <ion-icon class="ion-icon ion-font-25 ion-vertical-align-middle"
+                                                    name="arrow-forward-outline"></ion-icon>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+
+                                <ion-card
+                                    *ngIf="!(essen.vormittag === (null && 'null' && '') && essen.mittag === (null && 'null' && '') && essen.abend === (null && 'null' && '') && essen.medikamenteValue === (null && 'null' && ''))"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/essen-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1">
+                                            <ion-col>
+                                                <b>{{ 'essen' | translate }}</b> ({{essen.lastModified | dateTime}})
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row>
+                                            <ion-col>
+                                                <div>{{ 'vormittag' | translate }}: {{essen.vormittag}}</div>
+                                                <div>{{ 'mittag' | translate }}: {{essen.mittag}}</div>
+                                                <div>{{ 'abend' | translate }}: {{essen.abend}}</div>
+                                                <div>{{ 'medikamente' | translate }}: {{essen.medikamenteValue}}
+                                                </div>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+                            </ng-container>
+
+                            <ng-container *ngIf="deviceInfo.os === 'iOS' || deviceInfo.os === 'Windows'">
+                                <ion-card
+                                    *ngIf="essen.vormittag === (null && 'null' && '') && essen.mittag === (null && 'null' && '') && essen.abend === (null && 'null' && '') && essen.medikamenteValue === (null && 'null' && '')"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/essen-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1 ion-align-items-center">
+                                            <ion-col size="10">
+                                                <ion-text class="pt-bold">{{ 'essen-erfassen' | translate }}</ion-text>
+                                            </ion-col>
+                                            <ion-col class="ion-text-end" size="2">
+                                                <ion-icon class="ion-icon ion-font-25 ion-vertical-align-middle"
+                                                    name="arrow-forward-outline"></ion-icon>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+
+                                <ion-card
+                                    *ngIf="!(essen.vormittag === (null && 'null' && '') && essen.mittag === (null && 'null' && '') && essen.abend === (null && 'null' && '') && essen.medikamenteValue === (null && 'null' && ''))"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/essen-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1">
+                                            <ion-col>
+                                                <b>{{ 'essen' | translate }}</b> ({{essen.lastModified | dateTime}})
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row>
+                                            <ion-col>
+                                                <div>{{ 'vormittag' | translate }}: {{essen.vormittag}}</div>
+                                                <div>{{ 'mittag' | translate }}: {{essen.mittag}}</div>
+                                                <div>{{ 'abend' | translate }}: {{essen.abend}}</div>
+                                                <div>{{ 'medikamente' | translate }}: {{essen.medikamenteValue}}
+                                                </div>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+                            </ng-container>
+
+                        </ng-container>
+                    </ng-container>
+                    <!-- Essen Card ENDE -->
+
+                    <!-- Tagesform Card START -->
+                    <ng-container *ngFor="let tagesform of timelineTable.tagesform; let b = index">
+                        <ng-container *ngIf="tag.id === tagesform.tageid">
+
+                            <ng-container *ngIf="deviceInfo.os === 'Android'">
+                                <ion-card
+                                    *ngIf="tagesform.tagesformValue === null && tagesform.erschoepfungsartValue === null && tagesform.schlafValue === null && tagesform.stimmungValue === null"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/tagesform-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1 ion-align-items-center">
+                                            <ion-col size="10">
+                                                <ion-text class="pt-bold">{{ 'tagesform-erfassen' | translate }}
+                                                </ion-text>
+                                            </ion-col>
+                                            <ion-col class="ion-text-end" size="2">
+                                                <ion-icon class="ion-icon ion-font-25 ion-vertical-align-middle"
+                                                    name="arrow-forward-outline"></ion-icon>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+
+                                <ion-card
+                                    *ngIf="!(tagesform.tagesformValue === null && tagesform.erschoepfungsartValue === null && tagesform.schlafValue === null && tagesform.stimmungValue === null)"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/tagesform-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1">
+                                            <ion-col>
+                                                <b>{{ 'tagesform' | translate }}</b> ({{tagesform.lastModified |
+                                                dateTime}})
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row>
+                                            <ion-col>
+                                                <div>{{ 'tagesform-erfassen-page.tagesform' | translate }}:
+                                                    {{tagesform.tagesformValue | tagesformPipe | translate}}</div>
+                                                <div>{{ 'tagesform-erfassen-page.erschoepfungsart' | translate }}:
+                                                    {{tagesform.erschoepfungsartValue | erschoepfungsartPipe |
+                                                    translate}}</div>
+                                                <div>{{ 'tagesform-erfassen-page.schlaf' | translate }}:
+                                                    {{tagesform.schlafValue | tagesformPipe | translate}}</div>
+                                                <div>{{ 'tagesform-erfassen-page.stimmung' | translate }}:
+                                                    {{tagesform.stimmungValue | tagesformPipe | translate}}</div>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+                            </ng-container>
+
+                            <ng-container *ngIf="deviceInfo.os === 'iOS' || deviceInfo.os === 'Windows'">
+                                <ion-card
+                                    *ngIf="tagesform.tagesformValue === null && tagesform.erschoepfungsartValue === null && tagesform.schlafValue === null && tagesform.stimmungValue === null"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/tagesform-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1 ion-align-items-center">
+                                            <ion-col size="10">
+                                                <ion-text class="pt-bold">{{ 'tagesform-erfassen' | translate }}
+                                                </ion-text>
+                                            </ion-col>
+                                            <ion-col class="ion-text-end" size="2">
+                                                <ion-icon class="ion-icon ion-font-25 ion-vertical-align-middle"
+                                                    name="arrow-forward-outline"></ion-icon>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+
+                                <ion-card
+                                    *ngIf="!(tagesform.tagesformValue === null && tagesform.erschoepfungsartValue === null && tagesform.schlafValue === null && tagesform.stimmungValue === null)"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/tagesform-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1">
+                                            <ion-col>
+                                                <b>{{ 'tagesform' | translate }}</b> ({{tagesform.lastModified |
+                                                dateTime}})
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row>
+                                            <ion-col>
+                                                <div>{{ 'tagesform-erfassen-page.tagesform' | translate }}:
+                                                    {{tagesform.tagesformValue | tagesformPipe | translate}}</div>
+                                                <div>{{ 'tagesform-erfassen-page.erschoepfungsart' | translate }}:
+                                                    {{tagesform.erschoepfungsartValue | erschoepfungsartPipe |
+                                                    translate}}</div>
+                                                <div>{{ 'tagesform-erfassen-page.schlaf' | translate }}:
+                                                    {{tagesform.schlafValue | tagesformPipe | translate}}</div>
+                                                <div>{{ 'tagesform-erfassen-page.stimmung' | translate }}:
+                                                    {{tagesform.stimmungValue | tagesformPipe | translate}}</div>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+                            </ng-container>
+
+                        </ng-container>
+                    </ng-container>
+                    <!-- Tagesform Card ENDE -->
+
+                    <!-- Aktivitaeten Card START -->
+                    <ng-container *ngFor="let aktivitaet of timelineTable.aktivitaeten; let a = index">
+                        <ng-container *ngIf="tag.id === aktivitaet.tageid">
+
+                            <ng-container *ngIf="deviceInfo.os === 'Android'">
+                                <ion-card
+                                    *ngIf="aktivitaet.aktivitaetenNames === (null && 'null' && '') && aktivitaet.aktivitaetenNamesCheckboxes === (null && 'null' && '')"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/aktivitaeten-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1 ion-align-items-center">
+                                            <ion-col size="10">
+                                                <ion-text class="pt-bold">{{ 'aktivitaet-erfassen' | translate }}
+                                                </ion-text>
+                                            </ion-col>
+                                            <ion-col class="ion-text-end" size="2">
+                                                <ion-icon class="ion-icon ion-font-25 ion-vertical-align-middle"
+                                                    name="arrow-forward-outline"></ion-icon>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+
+                                <ion-card
+                                    *ngIf="!(aktivitaet.aktivitaetenNames === (null && 'null' && '') && aktivitaet.aktivitaetenNamesCheckboxes === (null && 'null' && ''))"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/aktivitaeten-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1">
+                                            <ion-col>
+                                                <b>{{ 'aktivitaet' | translate }}</b> ({{aktivitaet.lastModified |
+                                                dateTime}})
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row>
+                                            <ion-col>
+                                                {{aktivitaet.aktivitaetenNamesCheckboxes | commaBlankSeparator}}<br>
+                                                {{aktivitaet.aktivitaetenNames}}
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+                            </ng-container>
+
+
+                            <ng-container *ngIf="deviceInfo.os === 'iOS' || deviceInfo.os === 'Windows'">
+                                <ion-card
+                                    *ngIf="aktivitaet.aktivitaetenNames === (null && 'null' && '') && aktivitaet.aktivitaetenNamesCheckboxes === (null && 'null' && '')"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/aktivitaeten-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1 ion-align-items-center">
+                                            <ion-col size="10">
+                                                <ion-text class="pt-bold">{{ 'aktivitaet-erfassen' | translate }}
+                                                </ion-text>
+                                            </ion-col>
+                                            <ion-col class="ion-text-end" size="2">
+                                                <ion-icon class="ion-icon ion-font-25 ion-vertical-align-middle"
+                                                    name="arrow-forward-outline"></ion-icon>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+
+                                <ion-card
+                                    *ngIf="!(aktivitaet.aktivitaetenNames === (null && 'null' && '') && aktivitaet.aktivitaetenNamesCheckboxes === (null && 'null' && ''))"
+                                    class="pl-0 w-100 pt-timeline-card ion-flex-grow-1"
+                                    routerLink="/aktivitaeten-erfassen/{{tag.id}}">
+                                    <ion-card-content>
+                                        <ion-row class="mb-1">
+                                            <ion-col>
+                                                <b>{{ 'aktivitaet' | translate }}</b> ({{aktivitaet.lastModified |
+                                                dateTime}})
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row>
+                                            <ion-col>
+                                                {{aktivitaet.aktivitaetenNamesCheckboxes | commaBlankSeparator}}<br>
+                                                {{aktivitaet.aktivitaetenNames}}
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-card-content>
+                                </ion-card>
+                            </ng-container>
+
+                        </ng-container>
+                    </ng-container>
+
+                    <!-- Aktivitaeten Card ENDE -->
+
+
+                    <!-- Health daten Card START -->
+                    <ion-card class="pl-0 w-100 pt-timeline-card ion-flex-grow-1" routerLink="/health-data/{{tag.date}}">
+                        <ion-card-content>
+                            <ion-row class="mb-1 ion-align-items-center">
+                                <ion-col size="10">
+                                    <ion-text class="pt-bold">{{ 'health-data-erfassen' | translate }}
+                                    </ion-text>
+                                </ion-col>
+                                <ion-col class="ion-text-end" size="2">
+                                    <ion-icon class="ion-icon ion-font-25 ion-vertical-align-middle"
+                                        name="arrow-forward-outline"></ion-icon>
+                                </ion-col>
+                            </ion-row>
+                        </ion-card-content>
+                    </ion-card>
+
+                </ion-row>
+            </ion-col>
+
+        </ion-row>
+    </ion-grid>
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+        <ion-infinite-scroll-content loadingSpinner="lines">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+
+</ion-content>
+
+<ion-content *ngIf="timelineTable.tage.length === 0" class="vh-100">
+    <ion-button (click)="presentAlertBeforeStartingTimeline()" class="w-100 pt-circlebutton" expand="block" fill="clear"
+        size="default">
+        {{ 'tagebuch-timeline.app-starten' | translate }}
+    </ion-button>
+</ion-content>

@@ -1,0 +1,7 @@
+{
+  "name": "Long Covid Tagebuch",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
