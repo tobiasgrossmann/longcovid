@@ -1,0 +1,217 @@
+{
+  "go-to-store": "Go to store",
+  "heute": "Today",
+
+  "timeline": "Diary",
+
+  "message-title": "App Data Error",
+  "message": "Go to your smartphone settings, find the app and click on »Delete data«. Select »Delete all data«. The app will then work again.",
+
+  "wissen": "Knowledge",
+  "tagebuch": "Diary",
+  "more": "More",
+
+  "symptome": "Symptoms",
+  "tagesform": "Form on the day",
+  "essen": "Food",
+  "aktivitaet": "Activities",
+
+  "vormittag": "Morning",
+  "mittag": "Lunch",
+  "abend": "Evening",
+  "medikamente": "Medications",
+
+  "health-data-erfassen": "Check health data",
+  "essen-erfassen": "Record food",
+  "symptome-erfassen": "Record symptoms",
+  "tagesform-erfassen": "Record form",
+  "aktivitaet-erfassen": "Record activities",
+
+  "sehr-wenig": "very little",
+  "wenig": "little",
+  "mittel": "medium",
+  "stark": "intense",
+  "sehr-stark": "very intense",
+
+  "sehr-gut": "very good",
+  "gut": "good",
+  "ok": "ok",
+  "schlecht": "bad",
+  "sehr-schlecht": "very bad",
+
+  "sehr-psychisch": "very mental",
+  "psychisch": "mental",
+  "beides": "both",
+  "koerperlich": "physical",
+  "sehr-koerperlich": "very physical",
+
+  "viel": "much",
+  "sehr-viel": "very much",
+
+  "article":{
+    "article": "Article",
+    "source": "Source",
+    "date": "Published on"
+  },
+
+  "tagesform-erfassen-page": {
+    "success": "Form on the day successfully saved!",
+    "error": "Saving/loading form on the day failed!",
+    "tagesform-speichern": "Save",
+    "tagesform": "Form on the day",
+    "tagesform-beschreibung": "How was your general form on the day?",
+    "erschoepfungsart": "Type of exhaustion",
+    "erschoepfungsart-beschreibung": "If you were exhausted, what was the predominant type of exhaustion?",
+    "schlaf": "Sleep",
+    "schlaf-beschreibung": "How well have you slept?",
+    "stimmung": "Mood",
+    "stimmung-beschreibung": "What's your mood today?"
+  },
+
+  "essen-erfassen-page": {
+    "success": "Food successfully saved!",
+    "error": "Saving/loading food failed!",
+    "textarea-placeholder": "Enter food...",
+    "essen-speichern": "Save food",
+    "medikamente-placeholder": "Enter medications..."
+  },
+
+  "health-data-page": {
+    "title": "Health Data",
+    "daily-goals": "Daily Goals",
+    "steps": "Steps",
+    "stages": "Floors",
+    "distance": "Distance",
+    "statistics": "Statistics",
+    "health-kit-unsigned": "Apple HealthKit not connected",
+    "health-kit-signed": "Apple HealthKit connected",
+    "google-fit-unsigned": "Google Fit not connected",
+    "google-fit-signed": "Google Fit connected",
+    "heart-rate": "Heart rate",
+    "heart-rate-legend" : "Heart rate range:"
+  },
+
+  "aktivitaet-erfassen-page": {
+    "success": "Activities successfully saved!",
+    "error": "Saving/loading activities failed!",
+    "sport": "Sport",
+    "arbeit": "Work",
+    "hausarbeit": "Home duty",
+    "entspannung": "Relaxation",
+    "textarea-placeholder": "Enter activities...",
+    "aktivitaeten-speichern": "Save activities"
+  },
+
+  "symptome-erfassen-page": {
+    "success": "Symptoms successfully saved!",
+    "error": "Saving/loading symptoms failed!",
+    "textarea-placeholder": "Enter symptoms...",
+    "symptome-speichern": "Save symptoms",
+    "husten": "Cough",
+    "fieber": "Fever",
+    "fatigue": "Fatigue",
+    "kurzatmigkeit": "Shortness of breath",
+    "brustschmerzen": "Chest pain",
+    "kopfschmerzen": "Headache",
+    "geschmacksverlust": "Loss of smell/taste",
+    "neurologische-störung": "Neurocognitive difficulties",
+    "muskelschmerzen": "Muscle pain",
+    "hautausschlag": "Skin rash",
+    "missempfindungen": "Sensory disturbances",
+    "schwindel": "Dizziness",
+    "gedaechtniseinschraenkungen": "Memory impairment",
+    "leseeinschraenkungen": "Reading restrictions",
+    "erklaertext": "The list of the most common symptoms is based on the following study (published on 11.08.2020): "
+  },
+
+  "einstellungen": {
+    "titel": "Settings",
+    "sprache-select": "Language",
+    "country": "Country",
+    "backup-automatisch-anzahl": "Backups Storage",
+    "backup-select": "Backup",
+    "backup-erstellen": "Create backup ",
+    "backup-importieren": "Import backup",
+    "backup-import-success": "Import backup successfull!",
+    "backup-import-fail": "Import backup failed!",
+    "backup-delete": "Delete backup ",
+    "backup-delete-all": "Delete all backups",
+    "backup-creation-success": "Backup successfully created!",
+    "backup-creation-fail": "Backup creation failed!",
+    "backup-delete-all-success": "Delete all backups successfull!",
+    "backup-delete-all-fail": "Delete all backups failed!",
+    "delete-alert-message": "Do you really want to delete all backups?",
+    "back": "Back",
+    "delete-alert-do-delete": "Delete backups",
+    "import-alert-title": "Import backup",
+    "import-alert-message": "Do you really want to import the selected backup? All data will be overwritten.",
+    "import-alert-do-import": "Import backup",
+    "backups-finden-title": "Find Backups (Android)",
+    "backups-finden": "Using the following instructions, you can find the backups you have created in Android's file manager.",
+    "backups-finden-anleitung": "Guide: Finding Backups on Android (PDF)",
+    "datenbank-reset-title": "Delete all app data (Android)",
+    "datenbank-reset": "The following instructions can be used to delete all app data. This may be necessary in some circumstances if data migration fails.",
+    "datenbank-reset-anleitung": "Guide: Delete all app data on Android (PDF)",
+    "timeline-reset-title": "Delete timeline (entries) and restart",
+    "timeline-reset": "Sometimes you want to delete the previous data in the timeline. This can be done with the following buttons.",
+    "timeline-reset-button": "Reset timeline"
+  },
+
+  "analyse": {
+    "titel": "Analysis",
+    "tagesform": "Form on the day",
+    "tagesform-text": "All entries can be seen here over time. For example, if the form on the day was evaluated as »very good«, the circle of the day is green. If the daily form was evaluated with »very bad«, the circle is red. If no value was selected, the circle is gray.",
+    "erschoepfung": "Exhaustion",
+    "stimmung": "Mood",
+    "schlaf": "Sleep",
+    "sport": "Sport",
+    "arbeit": "Work",
+    "heart": "Heart rate",
+    "hausarbeit": "Home duty",
+    "entspannung": "Relaxation",
+    "teile-bild": "Share analysis image",
+    "erfassung-hinweis": "Data collected with the PatientStrength App"
+  },
+
+  "tagebuch-timeline": {
+    "daten-zurücksetzen": "Reset data",
+    "delete-alert-title": "Delete data",
+    "delete-alert-message": "Do you really want to delete all your app-data?",
+    "back": "Back",
+    "delete-alert-do-delete": "Delete data",
+    "txt-datei": "TXT-file",
+    "csv-datei": "CSV-file",
+    "teile-txt": "Share TXT-file",
+    "teile-csv": "Share CSV-file",
+    "erfassung-hinweis": "Data collected with the PatientStrength App",
+    "app-starten": "start Timeline",
+    "app-gestartet": "Timeline started!",
+    "export-fehler": "Export failed!",
+    "exportieren": "Export",
+    "daten-exportieren-header": "Export & share data",
+    "daten-exportieren-message": "For data export, a permission has to be granted once.",
+    "neuen-tag-erstellen": "Add new day",
+    "tag-erstellen": "Add day",
+    "tag-erstellen-title": "Add day",
+    "tag-erstellen-message": "Add any day to the diary",
+    "tag-erstellen-fehler": "Entry for this day already existing!",
+    "tag-loeschen": "Delete day",
+    "tag-loeschen-title": "Delete day",
+    "tag-loeschen-message": "Do you really want to delete this day?",
+    "tag-loschen-fehler": "Error when deleting the day.",
+    "error-adding-empty-day": "Choose date in order to add new day"
+  },
+
+  "impressum-page": {
+    "info": "Information",
+    "app-version": "App version",
+    "fehler": "Found a bug?",
+    "bug": "Please let our developer team know if you have encountered an error (bug):",
+    "ticket": "Create an error ticket",
+    "meinung": "Your opinion",
+    "meinung-text": "Tell us what you think about the app in general:",
+    "fragebogen": "Questionnaire about the app",
+    "impressum": "Imprint",
+    "datenschutz": "Privacy policy"
+  }
+}

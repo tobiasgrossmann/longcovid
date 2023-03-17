@@ -1,0 +1,6 @@
+framework module CapacitorCommunityAppcenterCrashes {
+  umbrella header "CapacitorCommunityAppcenterCrashes-umbrella.h"
+
+  export *
+  module * { export * }
+}

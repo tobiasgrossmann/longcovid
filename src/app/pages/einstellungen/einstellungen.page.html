@@ -1,0 +1,142 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>{{'einstellungen.titel' | translate }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="vh-100">
+
+    <!-- LANGUAGES-->
+    <ion-card class="ion-flex-grow-1">
+        <ion-card-header>
+            <ion-card-title class="w-100 pl-0">{{'einstellungen.sprache-select' | translate }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-item [formGroup]="languageForm">
+                <ion-icon name="globe-outline" slot="icon-only" style="color: #008984"></ion-icon>
+                <ion-label>
+                    {{'einstellungen.sprache-select' | translate }}
+                </ion-label>
+                <ion-select (ngModelChange)="onLanguageChange($event)" formControlName="language">
+                    <ion-select-option *ngFor="let language of languages" [value]="language.short">{{language.name}}
+                    </ion-select-option>
+                </ion-select>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+
+    <!-- COUNTRY -->
+    <ion-card class="ion-flex-grow-1">
+        <ion-card-header>
+            <ion-card-title class="w-100 pl-0">{{'einstellungen.country' | translate }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-item [formGroup]="countryForm">
+                <ion-icon name="globe-outline" slot="icon-only" style="color: #008984"></ion-icon>
+                <ion-label>
+                    {{'einstellungen.country' | translate }}
+                </ion-label>
+                <ion-select class="p-0" (ngModelChange)="onCountryChange($event)" formControlName="country">
+                    <ion-select-option *ngFor="let country of countries" [value]="country">{{country |
+                        CountryPipe:curentLanguage}}
+                    </ion-select-option>
+                </ion-select>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+
+    <!-- AUTOMATIC BACKUP NUMBER OF WANTED BACKUPS -->
+    <ion-card class="ion-flex-grow-1">
+        <ion-card-header>
+            <ion-card-title class="w-100 pl-0">{{'einstellungen.backup-automatisch-anzahl' | translate }}:
+                {{wantedBackupsNumber}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-range min="0" max="50" step="5" [value]="wantedBackupsNumber" (ionChange)="onValueChange($event)" pin
+                ticks snaps>
+            </ion-range>
+        </ion-card-content>
+    </ion-card>
+
+    <!-- BACKUPS ERSTELLEN-->
+    <ion-card class="ion-flex-grow-1">
+        <ion-card-header>
+            <ion-card-title class="w-100 pl-0">{{'einstellungen.backup-erstellen' | translate }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <!-- MAKE BACKUP-->
+            <ion-button (click)="onBackupClick()">{{'einstellungen.backup-erstellen' | translate }}</ion-button>
+
+        </ion-card-content>
+    </ion-card>
+
+    <!-- BACKUPS IMPORTIEREN-->
+    <ion-card class="ion-flex-grow-1">
+        <ion-card-header>
+            <ion-card-title class="w-100 pl-0">{{'einstellungen.backup-importieren' | translate }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <!-- CHOOSE BACKUP TO IMPORT-->
+            <ion-item [formGroup]="backupForm">
+                <ion-icon name="globe-outline" slot="icon-only" style="color: #008984"></ion-icon>
+                <ion-label>
+                    {{'einstellungen.backup-select' | translate }}
+                </ion-label>
+                <ion-select (ngModelChange)="onBackupChange($event)" formControlName="backup">
+                    <ion-select-option *ngFor="let backup of backups" [value]="backup.name">{{backup.name}}
+                    </ion-select-option>
+                </ion-select>
+            </ion-item>
+
+            <ion-button (click)="importBackupAlert()">{{'einstellungen.backup-importieren' | translate }}</ion-button>
+
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="ion-flex-grow-1">
+        <ion-card-header>
+            <ion-card-title class="w-100 pl-0">{{'einstellungen.backup-delete' | translate }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+
+            <ion-button (click)="deleteBackupsAlert()">{{'einstellungen.backup-delete-all' | translate }}</ion-button>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="ion-flex-grow-1">
+        <ion-card-header>
+            <ion-card-title class="w-100 pl-0">{{ 'einstellungen.backups-finden-title' | translate }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <p>{{ 'einstellungen.backups-finden' | translate }}</p>
+            <a href="https://storage.patient-strength.ch/privacy/PT_Anleitung_Backups-finden_22-03-22.pdf"
+                rel="nofollow noopener" target="_blank">{{ 'einstellungen.backups-finden-anleitung' | translate }}</a>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="ion-flex-grow-1">
+        <ion-card-header>
+            <ion-card-title class="w-100 pl-0">{{ 'einstellungen.datenbank-reset-title' | translate }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <p>{{ 'einstellungen.datenbank-reset' | translate }}</p>
+            <a href="https://storage.patient-strength.ch/privacy/PT_Anleitung_App-Daten-loeschen_22-03-22.pdf"
+                rel="nofollow noopener" target="_blank">{{ 'einstellungen.datenbank-reset-anleitung' | translate }}</a>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="ion-flex-grow-1">
+        <ion-card-header>
+            <ion-card-title class="w-100 pl-0">{{ 'einstellungen.timeline-reset-title' | translate }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <p>{{ 'einstellungen.timeline-reset' | translate }}</p>
+            <ion-button color="danger" (click)="presentDeleteAlert()">{{ 'einstellungen.timeline-reset-button' |
+                translate }}</ion-button>
+        </ion-card-content>
+    </ion-card>
+
+</ion-content>

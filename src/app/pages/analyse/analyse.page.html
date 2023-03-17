@@ -1,0 +1,237 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{'analyse.titel' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="vh-100">
+
+  <!-- TAGESFORM -->
+  <ion-card class="ion-flex-grow-1">
+    <ion-card-header>
+      <ion-img class="vh-25" src="assets/images/Analyzing process_Flatline.svg"></ion-img>
+      <ion-card-title class="pl-0">{{'analyse.titel' | translate }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-note id="ion-source">{{'analyse.tagesform-text' | translate }}</ion-note>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="ion-flex-grow-1" id="tagesformAnalyseContent">
+    <ion-card-header>
+      <ion-toolbar color="">
+        <ion-card-title class="pl-0">{{'analyse.tagesform' | translate }}</ion-card-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="shareAsImage('tagesformCalendar')" class="m-0 p-0" expand="block" fill="clear">
+            <ion-icon class="ion-icon ion-font-20" name="share-social-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-calendar [(ngModel)]="dateToday" [options]="optionsMulti"
+        (change)="onChangeMonth('#tagesformCalendar','tagesform_value')"
+        (monthChange)="onChangeMonth('#tagesformCalendar','tagesform_value')" [type]="type" [readonly]="true"
+        [format]="'DD-MM-YYYY'" #analyseCalendar id="tagesformCalendar">
+      </ion-calendar>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="ion-flex-grow-1" id="erschoepfungAnalyseContent">
+    <ion-card-header>
+      <ion-toolbar>
+        <ion-card-title class="pl-0">{{'analyse.erschoepfung' | translate }}</ion-card-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="shareAsImage('erschoepfungCalendar')" class="m-0 p-0" expand="block" fill="clear">
+            <ion-icon class="ion-icon ion-font-20" name="share-social-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+    <ion-card-content>
+
+      <ion-calendar [(ngModel)]="dateToday" [options]="optionsMulti"
+        (change)="onChangeMonth('#erschoepfungCalendar','stimmung_value')"
+        (monthChange)="onChangeMonth('#erschoepfungCalendar','stimmung_value')" [type]="type" [readonly]="true"
+        [format]="'DD-MM-YYYY'" #erschoepfungCalendar id="erschoepfungCalendar">
+      </ion-calendar>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="ion-flex-grow-1" id="stimmungAnalyseContent">
+    <ion-card-header>
+      <ion-toolbar>
+        <ion-card-title class="pl-0">{{'analyse.stimmung' | translate }}</ion-card-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="shareAsImage('stimmungCalendar')" class="m-0 p-0" expand="block" fill="clear">
+            <ion-icon class="ion-icon ion-font-20" name="share-social-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+    <ion-card-content>
+
+      <ion-calendar [(ngModel)]="dateToday" [options]="optionsMulti"
+        (change)="onChangeMonth('#stimmungCalendar','stimmung_value')"
+        (monthChange)="onChangeMonth('#stimmungCalendar','stimmung_value')" [type]="type" [readonly]="true"
+        [format]="'DD-MM-YYYY'" #stimmungCalendar id="stimmungCalendar">
+      </ion-calendar>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="ion-flex-grow-1" id="schlafAnalyseContent">
+    <ion-card-header>
+      <ion-toolbar>
+        <ion-card-title class="pl-0">{{'analyse.schlaf' | translate }}</ion-card-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="shareAsImage('schlafCalendar')" class="m-0 p-0" expand="block" fill="clear">
+            <ion-icon class="ion-icon ion-font-20" name="share-social-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+    <ion-card-content>
+
+      <ion-calendar [(ngModel)]="dateToday" [options]="optionsMulti"
+        (change)="onChangeMonth('#schlafCalendar','schlaf_value')"
+        (monthChange)="onChangeMonth('#schlafCalendar','schlaf_value')" [type]="type" [readonly]="true"
+        [format]="'DD-MM-YYYY'" #schlafCalendar id="schlafCalendar">
+      </ion-calendar>
+    </ion-card-content>
+  </ion-card>
+
+
+  <!--
+   --
+   --
+   AKTIVITAETEN
+    -->
+
+  <ion-card class="ion-flex-grow-1">
+    <ion-card-header>
+      <ion-toolbar>
+        <ion-card-title class="pl-0">{{'analyse.sport' | translate }}</ion-card-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="shareAsImage('sportCalendar')" class="m-0 p-0" expand="block" fill="clear">
+            <ion-icon class="ion-icon ion-font-20" name="share-social-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+    <ion-card-content id="sportAnalyseContent">
+
+      <ion-calendar [(ngModel)]="dateToday" [options]="optionsMulti"
+        (change)="onChangeMonth('#sportCalendar', 'sport_value')"
+        (monthChange)="onChangeMonth('#sportCalendar', 'sport_value')" [type]="type" [readonly]="true"
+        [format]="'DD-MM-YYYY'" #sportCalendar id="sportCalendar">
+      </ion-calendar>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="ion-flex-grow-1">
+    <ion-card-header>
+      <ion-toolbar>
+        <ion-card-title class="pl-0">{{'analyse.arbeit' | translate }}</ion-card-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="shareAsImage('arbeitCalendar')" class="m-0 p-0" expand="block" fill="clear">
+            <ion-icon class="ion-icon ion-font-20" name="share-social-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+    <ion-card-content id="arbeitAnalyseContent">
+
+      <ion-calendar [(ngModel)]="dateToday" [options]="optionsMulti"
+        (change)="onChangeMonth('#arbeitCalendar', 'arbeit_value')"
+        (monthChange)="onChangeMonth('#arbeitCalendar', 'arbeit_value')" [type]="type" [readonly]="true"
+        [format]="'DD-MM-YYYY'" #arbeitCalendar id="arbeitCalendar">
+      </ion-calendar>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="ion-flex-grow-1">
+    <ion-card-header>
+      <ion-toolbar>
+        <ion-card-title class="pl-0">{{'analyse.hausarbeit' | translate }}</ion-card-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="shareAsImage('hausarbeitCalendar')" class="m-0 p-0" expand="block" fill="clear">
+            <ion-icon class="ion-icon ion-font-20" name="share-social-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+    <ion-card-content id="hausarbeitAnalyseContent">
+
+      <ion-calendar [(ngModel)]="dateToday" [options]="optionsMulti"
+        (change)="onChangeMonth('#hausarbeitCalendar', 'hausarbeit_value')"
+        (monthChange)="onChangeMonth('#hausarbeitCalendar', 'hausarbeit_value')" [type]="type" [readonly]="true"
+        [format]="'DD-MM-YYYY'" #hausarbeitCalendar id="hausarbeitCalendar">
+      </ion-calendar>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="ion-flex-grow-1">
+    <ion-card-header>
+      <ion-toolbar>
+        <ion-card-title class="pl-0">{{'analyse.entspannung' | translate }}</ion-card-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="shareAsImage('entspannungCalendar')" class="m-0 p-0" expand="block" fill="clear">
+            <ion-icon class="ion-icon ion-font-20" name="share-social-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+    <ion-card-content id="entspannungAnalyseContent">
+
+      <ion-calendar [(ngModel)]="dateToday" [options]="optionsMulti"
+        (change)="onChangeMonth('#entspannungCalendar','entspannung_value')"
+        (monthChange)="onChangeMonth('#entspannungCalendar','entspannung_value')" [type]="type" [readonly]="true"
+        [format]="'DD-MM-YYYY'" #entspannungCalendar id="entspannungCalendar">
+      </ion-calendar>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Health data -->
+  <ion-card class="ion-flex-grow-1">
+    <ion-card-header>
+      <ion-toolbar>
+        <ion-card-title class="pl-0">{{'analyse.heart' | translate }}</ion-card-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="shareAsImage('heartCalendar')" class="m-0 p-0" expand="block" fill="clear">
+            <ion-icon class="ion-icon ion-font-20" name="share-social-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+    <ion-card-content id="heartAnalyseContent">
+
+      <ion-calendar [(ngModel)]="dateToday" [options]="optionsMulti"
+        (change)="onChangeMonth('#heartCalendar','heart_value', heartRateData)"
+        (monthChange)="onChangeMonth('#heartCalendar','heart_value', heartRateData)" [type]="type" [readonly]="true"
+        [format]="'DD-MM-YYYY'" #heartCalendar id="heartCalendar">
+      </ion-calendar>
+      <div class="heart-colors-legend">
+        <div>
+          <span class="heart-colors-legend-red"><ion-icon name="heart"></ion-icon></span>
+          <span> 0-39</span>
+        </div>
+        <div>
+          <span class="heart-colors-legend-green"><ion-icon name="heart"></ion-icon></span>
+          <span> 40-72</span>
+        </div>
+        <div>
+          <span class="heart-colors-legend-yellow"><ion-icon name="heart"></ion-icon></span>
+          <span> 73-81</span>
+        </div>
+        <div>
+          <span class="heart-colors-legend-red"><ion-icon name="heart"></ion-icon></span>
+          <span>  82+</span>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

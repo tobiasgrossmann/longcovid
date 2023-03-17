@@ -1,0 +1,118 @@
+PODS:
+  - AppCenter/Analytics (4.3.0):
+    - AppCenter/Core
+  - AppCenter/Core (4.3.0)
+  - AppCenter/Crashes (4.3.0):
+    - AppCenter/Core
+  - AppCenterCapacitorShared (1.0.0):
+    - AppCenter/Core (= 4.3.0)
+  - Capacitor (3.4.3):
+    - CapacitorCordova
+  - CapacitorApp (1.1.1):
+    - Capacitor
+  - CapacitorCommunityAppcenterAnalytics (1.0.0):
+    - AppCenter/Analytics (= 4.3.0)
+    - AppCenterCapacitorShared (~> 1.0.0)
+    - Capacitor
+  - CapacitorCommunityAppcenterCrashes (1.0.1):
+    - AppCenter/Crashes (= 4.3.0)
+    - AppCenterCapacitorShared (~> 1.0.0)
+    - Capacitor
+  - CapacitorCommunitySqlite (3.4.1):
+    - Capacitor
+    - SQLCipher
+    - ZIPFoundation
+  - CapacitorCordova (3.4.3)
+  - CapacitorDialog (1.0.7):
+    - Capacitor
+  - CapacitorFilesystem (1.1.0):
+    - Capacitor
+  - CapacitorShare (1.1.2):
+    - Capacitor
+  - CordovaPlugins (3.4.3):
+    - CapacitorCordova
+  - RobingenzCapacitorBackgroundTask (1.0.1):
+    - Capacitor
+  - Sentry (7.1.4):
+    - Sentry/Core (= 7.1.4)
+  - Sentry/Core (7.1.4)
+  - SentryCapacitor (0.4.4):
+    - Capacitor
+    - Sentry (~> 7.1.3)
+  - SQLCipher (4.5.3):
+    - SQLCipher/standard (= 4.5.3)
+  - SQLCipher/common (4.5.3)
+  - SQLCipher/standard (4.5.3):
+    - SQLCipher/common
+  - ZIPFoundation (0.9.16)
+
+DEPENDENCIES:
+  - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
+  - "CapacitorCommunityAppcenterAnalytics (from `../../node_modules/@capacitor-community/appcenter-analytics`)"
+  - "CapacitorCommunityAppcenterCrashes (from `../../node_modules/@capacitor-community/appcenter-crashes`)"
+  - "CapacitorCommunitySqlite (from `../../node_modules/@capacitor-community/sqlite`)"
+  - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
+  - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
+  - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
+  - CordovaPlugins (from `../capacitor-cordova-ios-plugins`)
+  - "RobingenzCapacitorBackgroundTask (from `../../node_modules/@robingenz/capacitor-background-task`)"
+  - "SentryCapacitor (from `../../node_modules/@sentry/capacitor`)"
+
+SPEC REPOS:
+  trunk:
+    - AppCenter
+    - AppCenterCapacitorShared
+    - Sentry
+    - SQLCipher
+    - ZIPFoundation
+
+EXTERNAL SOURCES:
+  Capacitor:
+    :path: "../../node_modules/@capacitor/ios"
+  CapacitorApp:
+    :path: "../../node_modules/@capacitor/app"
+  CapacitorCommunityAppcenterAnalytics:
+    :path: "../../node_modules/@capacitor-community/appcenter-analytics"
+  CapacitorCommunityAppcenterCrashes:
+    :path: "../../node_modules/@capacitor-community/appcenter-crashes"
+  CapacitorCommunitySqlite:
+    :path: "../../node_modules/@capacitor-community/sqlite"
+  CapacitorCordova:
+    :path: "../../node_modules/@capacitor/ios"
+  CapacitorDialog:
+    :path: "../../node_modules/@capacitor/dialog"
+  CapacitorFilesystem:
+    :path: "../../node_modules/@capacitor/filesystem"
+  CapacitorShare:
+    :path: "../../node_modules/@capacitor/share"
+  CordovaPlugins:
+    :path: "../capacitor-cordova-ios-plugins"
+  RobingenzCapacitorBackgroundTask:
+    :path: "../../node_modules/@robingenz/capacitor-background-task"
+  SentryCapacitor:
+    :path: "../../node_modules/@sentry/capacitor"
+
+SPEC CHECKSUMS:
+  AppCenter: 883369ab78427b0561c688158d689dfe1f993ea9
+  AppCenterCapacitorShared: 64a70a9174e71ef5acf56bd7d2db0956663282f2
+  Capacitor: a8d7fa9fb3b50adc610247bb8d0310e83424f746
+  CapacitorApp: 6539a37b671391147dd0180e1483c051077254bf
+  CapacitorCommunityAppcenterAnalytics: 8c8e9e036c55947ca6b7fcf9cf0aab665abea9d2
+  CapacitorCommunityAppcenterCrashes: fb523fee26294688fd0678814bffc40b60366aa3
+  CapacitorCommunitySqlite: c252ab2c224d46148b847f340793ea092cbc9c91
+  CapacitorCordova: 687b7d3ef4872c03aa2a2eb052d23008be9ad76b
+  CapacitorDialog: 8bc7116e58d30b126c4d033c06f78a14e554d089
+  CapacitorFilesystem: 47738a7110f2eb8629054217d8d6027d9ffd4e5b
+  CapacitorShare: f1a8ffd3bba7d6113f53fb65aa47d61764c4640a
+  CordovaPlugins: 81e048e5167bac09b25ea0bdbd00ce3b316a126d
+  RobingenzCapacitorBackgroundTask: 4da3dd76050b5d94acda39ca74a1e35cb0f9e0db
+  Sentry: 1d3eb1a25f8c5333c88dd5603904a6d461cd9fcf
+  SentryCapacitor: 370555d2d25b6d089ce6cb944200c46bbf092884
+  SQLCipher: 57fa9f863fa4a3ed9dd3c90ace52315db8c0fdca
+  ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
+
+PODFILE CHECKSUM: bf4e45354d3b8048351aec4d7e03315d0c181906
+
+COCOAPODS: 1.11.3
