@@ -1,6 +1,0 @@
-framework module RobingenzCapacitorBackgroundTask {
-  umbrella header "RobingenzCapacitorBackgroundTask-umbrella.h"
-
-  export *
-  module * { export * }
-}
