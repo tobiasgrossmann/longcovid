@@ -78,7 +78,6 @@ export class DatabaseCrudService {
         this.db = await this.sqliteService
           .createConnection(this.dbName, false,
             "no-encryption", currentDatabaseVersion);
-            console.log(">>>> this.db createConnection:  " + this.db);
             this.essenRepository = new EssenRepository(this.db);
             this.symptomRepository = new SymptomRepository(this.db);
             this.aktivitaetRepository = new AktivitaetRepository(this.db);
